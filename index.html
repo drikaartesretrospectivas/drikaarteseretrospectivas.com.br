@@ -2,80 +2,81 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Convite | Drika Artes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Drika Artes e Retrospectivas</title>
 
   <style>
-    * {
+    body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: #000;
+      background: #f5f5f5;
       display: flex;
       justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
     }
 
-    /* Moldura formato celular */
+    /* Container 9:16 (formato celular) */
     .phone-frame {
       width: 100%;
-      max-width: 430px;
+      max-width: 420px;
       aspect-ratio: 9 / 16;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
       background: #000;
       position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
+    /* Canva embed */
     .phone-frame iframe {
       width: 100%;
       height: 100%;
       border: none;
     }
 
-    /* Botão WhatsApp */
-    .whatsapp-float {
+    /* Botões internos */
+    .buttons {
       position: absolute;
-      bottom: 16px;
-      right: 16px;
-      width: 56px;
-      height: 56px;
-      background-color: #25D366;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 85%;
+      z-index: 10;
+    }
+
+    .buttons a {
+      text-decoration: none;
+      background: #ffffff;
+      color: #000;
+      text-align: center;
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Botão flutuante WhatsApp */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background: #25D366;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 10;
-      cursor: pointer;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-      animation: pulse 1.8s infinite;
+      z-index: 9999;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
     }
 
     .whatsapp-float img {
-      width: 30px;
-      height: 30px;
-    }
-
-    /* Animação pulse sutil */
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6);
-      }
-      70% {
-        transform: scale(1.08);
-        box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
-      }
-      100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
-      }
+      width: 32px;
+      height: 32px;
     }
   </style>
 </head>
@@ -83,28 +84,22 @@
 <body>
 
   <div class="phone-frame">
-
     <iframe 
-      src="https://www.canva.com/design/DAG9Ai1NV4E/uJcDKIJaytXJsj1ksE_XWg/watch?embed"
       loading="lazy"
-      allowfullscreen
-      allow="fullscreen">
+      src="https://www.canva.com/design/DAG9Ai1NV4E/uJcDKIJaytXJsj1ksE_XWg/watch?embed"
+      allowfullscreen>
     </iframe>
-
-    <!-- Botão WhatsApp animado -->
-    <a 
-      href="https://wa.me/5511950673897?text=Olá%20Drika!%20Vim%20pelo%20seu%20convite%20digital%20💖"
-      target="_blank"
-      class="whatsapp-float"
-      aria-label="Falar no WhatsApp">
-
-      <img 
-        src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
-        alt="WhatsApp">
-    </a>
-
   </div>
+
+  <!-- BOTÃO FLUTUANTE WHATSAPP -->
+  <a 
+    class="whatsapp-float"
+    href="https://wa.me/5511950673897?text=Oi%2C%20eu%20vim%20pelo%20seu%20site"
+    target="_blank"
+    aria-label="Fale comigo no WhatsApp"
+  >
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+  </a>
 
 </body>
 </html>
-
