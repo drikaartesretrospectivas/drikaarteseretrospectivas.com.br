@@ -1,65 +1,110 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Bem-vindo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Convite | Drika Artes</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        .container {
-            background: #ffffff;
-            padding: 40px;
-            max-width: 420px;
-            width: 90%;
-            text-align: center;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
+    body {
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+    }
 
-        h1 {
-            margin-bottom: 10px;
-            font-size: 26px;
-            color: #333;
-        }
+    /* Moldura formato celular */
+    .phone-frame {
+      width: 100%;
+      max-width: 430px;
+      aspect-ratio: 9 / 16;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+      background: #000;
+      position: relative;
+    }
 
-        p {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 25px;
-        }
+    .phone-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
 
-        a {
-            display: inline-block;
-            text-decoration: none;
-            background: #4f46e5;
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
+    /* Botão WhatsApp */
+    .whatsapp-float {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      width: 56px;
+      height: 56px;
+      background-color: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+      animation: pulse 1.8s infinite;
+    }
 
-        a:hover {
-            background: #4338ca;
-        }
-    </style>
+    .whatsapp-float img {
+      width: 30px;
+      height: 30px;
+    }
+
+    /* Animação pulse sutil */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6);
+      }
+      70% {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Site em construção</h1>
-        <p>Em breve você encontrará aqui todas as informações e novidades.</p>
-        <a href="#">Acompanhe em breve</a>
-    </div>
+
+  <div class="phone-frame">
+
+    <iframe 
+      src="https://www.canva.com/design/DAG9Ai1NV4E/uJcDKIJaytXJsj1ksE_XWg/watch?embed"
+      loading="lazy"
+      allowfullscreen
+      allow="fullscreen">
+    </iframe>
+
+    <!-- Botão WhatsApp animado -->
+    <a 
+      href="https://wa.me/5511950673897?text=Olá%20Drika!%20Vim%20pelo%20seu%20convite%20digital%20💖"
+      target="_blank"
+      class="whatsapp-float"
+      aria-label="Falar no WhatsApp">
+
+      <img 
+        src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
+        alt="WhatsApp">
+    </a>
+
+  </div>
+
 </body>
 </html>
+
