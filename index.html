@@ -1,105 +1,111 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Drika Artes e Retrospectivas</title>
 
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: #f5f5f5;
+      background: #f1f1f1;
+      font-family: Arial, Helvetica, sans-serif;
       display: flex;
       justify-content: center;
     }
 
-    /* Container 9:16 (formato celular) */
-    .phone-frame {
+    /* Container 9:16 */
+    .canva-wrapper {
+      position: relative;
       width: 100%;
       max-width: 420px;
-      aspect-ratio: 9 / 16;
-      background: #000;
-      position: relative;
+      height: 0;
+      padding-top: 177.7778%; /* 9:16 */
+      margin: 20px;
       overflow: hidden;
-      border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      background: #fff;
     }
 
-    /* Canva embed */
-    .phone-frame iframe {
+    .canva-wrapper iframe {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       border: none;
     }
 
-    /* Botões internos */
-    .buttons {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      width: 85%;
-      z-index: 10;
-    }
-
-    .buttons a {
-      text-decoration: none;
-      background: #ffffff;
-      color: #000;
-      text-align: center;
-      padding: 14px;
-      border-radius: 10px;
-      font-weight: 600;
-      font-family: Arial, sans-serif;
-    }
-
-    /* Botão flutuante WhatsApp */
+    /* Botão WhatsApp (preso ao 9:16) */
     .whatsapp-float {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      background: #25D366;
-      border-radius: 50%;
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+      gap: 10px;
+      background: #25d366;
+      color: #ffffff;
+      padding: 12px 18px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: bold;
+      box-shadow: 0 0 0 rgba(37, 211, 102, 0.7);
+      animation: pulseGlow 2.2s infinite;
+      z-index: 20;
     }
 
     .whatsapp-float img {
-      width: 32px;
-      height: 32px;
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Animação */
+    @keyframes pulseGlow {
+      0% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+        transform: scale(1);
+      }
+      60% {
+        box-shadow: 0 0 0 16px rgba(37, 211, 102, 0);
+        transform: scale(1.06);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+        transform: scale(1);
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="phone-frame">
-    <iframe 
+  <div class="canva-wrapper">
+
+    <!-- Canva incorporado (SEU LINK) -->
+    <iframe
       loading="lazy"
-      src="https://www.canva.com/design/DAG9Ai1NV4E/uJcDKIJaytXJsj1ksE_XWg/watch?embed"
+      src="https://www.canva.com/design/DAG9jvzT7bM/SUSF4F5CJihZnH1RJTcbjA/watch?embed"
       allowfullscreen>
     </iframe>
-  </div>
 
-  <!-- BOTÃO FLUTUANTE WHATSAPP -->
-  <a 
-    class="whatsapp-float"
-    href="https://wa.me/5511950673897?text=Oi%2C%20eu%20vim%20pelo%20seu%20site"
-    target="_blank"
-    aria-label="Fale comigo no WhatsApp"
-  >
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
-  </a>
+    <!-- Botão WhatsApp -->
+    <a
+      href="https://wa.me/5511950673897?text=Eu%20vim%20pelo%20seu%20site"
+      target="_blank"
+      class="whatsapp-float"
+      aria-label="Fale comigo no WhatsApp">
+
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+        alt="WhatsApp">
+      Fale comigo
+    </a>
+
+  </div>
 
 </body>
 </html>
+
