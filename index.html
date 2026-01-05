@@ -1,111 +1,86 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Drika Artes e Retrospectivas</title>
+  <meta charset="UTF-8">
+  <title>Convites Crispoparte</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
-      background: #f1f1f1;
-      font-family: Arial, Helvetica, sans-serif;
-      display: flex;
-      justify-content: center;
-    }
-
-    /* Container 9:16 */
-    .canva-wrapper {
-      position: relative;
-      width: 100%;
-      max-width: 420px;
-      height: 0;
-      padding-top: 177.7778%; /* 9:16 */
-      margin: 20px;
-      overflow: hidden;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      background: #fff;
-    }
-
-    .canva-wrapper iframe {
-      position: absolute;
-      inset: 0;
       width: 100%;
       height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+
+    iframe {
+      width: 100vw;
+      height: 100vh;
       border: none;
     }
 
-    /* Botão WhatsApp (preso ao 9:16) */
+    /* Botão flutuante WhatsApp */
     .whatsapp-float {
-      position: absolute;
-      bottom: 16px;
-      right: 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #25d366;
+      position: fixed;
+      bottom: 90px; /* mais acima do rodapé */
+      right: 20px;
+      background-color: #25D366;
       color: #ffffff;
-      padding: 12px 18px;
+      padding: 14px 20px;
       border-radius: 50px;
-      text-decoration: none;
+      font-family: Arial, sans-serif;
       font-size: 14px;
-      font-weight: bold;
-      box-shadow: 0 0 0 rgba(37, 211, 102, 0.7);
-      animation: pulseGlow 2.2s infinite;
-      z-index: 20;
+      text-decoration: none;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+      z-index: 99999;
+      animation: fadeIn 0.6s ease;
     }
 
-    .whatsapp-float img {
-      width: 24px;
-      height: 24px;
+    .whatsapp-float:hover {
+      background-color: #1ebe5d;
     }
 
-    /* Animação */
-    @keyframes pulseGlow {
-      0% {
-        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
-        transform: scale(1);
-      }
-      60% {
-        box-shadow: 0 0 0 16px rgba(37, 211, 102, 0);
-        transform: scale(1.06);
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
-        transform: scale(1);
-      }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="canva-wrapper">
+  <!-- BOTÃO FALE COMIGO -->
+  <a
+    id="whatsappButton"
+    class="whatsapp-float"
+    href="https://wa.me/5571993233142"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Fale comigo
+  </a>
 
-    <!-- Canva incorporado (SEU LINK) -->
-    <iframe
-      loading="lazy"
-      src="https://www.canva.com/design/DAG9jvzT7bM/SUSF4F5CJihZnH1RJTcbjA/view?embed"
-      allowfullscreen>
-    </iframe>
+  <iframe
+    src="https://www.canva.com/design/DAG1T2-vIWw/Nt58ZGi-7jMvqG4hlZ44SA/view?embed"
+    allowfullscreen>
+  </iframe>
 
-    <!-- Botão WhatsApp -->
-    <a
-      href="https://wa.me/5511950673897?text=Eu%20vim%20pelo%20seu%20site"
-      target="_blank"
-      class="whatsapp-float"
-      aria-label="Fale comigo no WhatsApp">
+  <script>
+    const button = document.getElementById('whatsappButton');
 
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-        alt="WhatsApp">
-      Fale comigo
-    </a>
+    // Esconde o botão após a primeira interação fora dele
+    function hideButton(e) {
+      if (e.target.closest('#whatsappButton')) return;
+      button.style.display = 'none';
+      document.removeEventListener('click', hideButton);
+      document.removeEventListener('touchstart', hideButton);
+    }
 
-  </div>
+    document.addEventListener('click', hideButton);
+    document.addEventListener('touchstart', hideButton);
+  </script>
 
 </body>
 </html>
-
