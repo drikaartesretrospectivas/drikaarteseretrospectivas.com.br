@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convite Benicio</title>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #000;
+    overflow: hidden;
+    font-family: sans-serif;
+    /* Impede o scroll e garante preenchimento total */
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .page {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  /* AJUSTE CHAVE: contain para não cortar a arte */
+  .page img,
+  .page video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+  }
+
+  /* HOTSPOTS */
+  .hotspot {
+    cursor: pointer;
+    width: 70px;      
+    height: 70px;
+    border-radius: 50%;
+    display: block;
+  /* background: rgba(255, 0, 0, 0.3); */ /* O fundo vermelho agora está devidamente desativado */
+  }
+
+  /* CONTAINER DOS BOTÕES */
+  .footer-center-group {
+    position: absolute;
+    bottom: 22%;      
+    left: 62%;        /* Centralizado no meio da tela */
+    transform: translateX(-50%);
+    display: flex;
+    gap: 25px;        /* Espaçamento entre os dois ícones */
+    z-index: 10;
+  }
+</style>
+</head>
+
+<body>
+
+<audio id="musica" src="audio.mp3" loop></audio>
+
+<div class="page" id="page1" style="display:block;">
+  <img src="pagina1.png">
+  <div style="position:absolute; top:0; left:0; width:100%; height:100%; cursor:pointer;" onclick="startInvite()"></div>
+</div>
+
+<div class="page" id="page2">
+  <video id="video" src="pagina2.mp4" playsinline></video>
+</div>
+
+<div class="page" id="page3">
+  <img src="pagina3.jpg">
+
+  <div class="footer-center-group">
+    <a href="https://maps.google.com" target="_blank" class="hotspot"></a>
+
+    <a href="https://drikaarteseretrospectivas.com.br/Filtro-Benicio-04anos-07-02/" target="_blank" class="hotspot"></a>
+  </div>
+</div>
+
+<script>
+const musica = document.getElementById('musica');
+const video = document.getElementById('video');
+
+function startInvite() {
+  musica.play().catch(e => console.log("Som bloqueado", e));
+  goPage(2);
+  video.play();
+
+  video.onended = () => {
+    goPage(3);
+  };
+}
+
+function goPage(num) {
+  document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+  document.getElementById('page' + num).style.display = 'block';
+}
+</script>
+
+<div style="display: none !important; visibility: hidden; pointer-events: none;" aria-hidden="true">
+    © 2026 Cristiane Oliveira. Todos os direitos reservados. 
+    Este software, design e algoritmos estão protegidos pela Lei de Direitos Autorais (Lei nº 9.610/98). 
+</div>
+
+<script>
+    (function() {
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if (
+                e.keyCode == 123 || 
+                (e.ctrlKey && e.keyCode == 85) || 
+                (e.ctrlKey && e.shiftKey && e.keyCode == 73) || 
+                (e.ctrlKey && e.keyCode == 67) || 
+                (e.ctrlKey && e.keyCode == 83)
+            ) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        console.log("%c Protegido pela Lei 9.610/98 - Autoria: Cristiane Oliveira ", "color: white; background: red; font-weight: bold;");
+    })();
+</script>
+
+</body>
+</html>
