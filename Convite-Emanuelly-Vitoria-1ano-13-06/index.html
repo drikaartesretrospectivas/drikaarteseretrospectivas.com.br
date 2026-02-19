@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Convite Emanuelly Vitoria</title>
 
 <style>
@@ -17,26 +17,25 @@ body {
   overflow: hidden;
 }
 
-/* ALTURA CORRETA PARA CELULAR */
+/* PÁGINAS */
 .page {
   display: none;
   width: 100vw;
-  height: 100dvh; /* resolve corte no mobile */
+  height: 100dvh;
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain; /* NÃO CORTA */
 }
 
-/* IMAGEM E VIDEO SEM CORTE */
-.page img,
-.page video {
-  max-width: 100%;
-  max-height: 100%;
+/* VIDEO */
+#video {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
-/* BOTÕES INVISÍVEIS */
+/* BOTÕES */
 .hotspot {
   position: absolute;
   width: 70px;
@@ -44,7 +43,7 @@ body {
   cursor: pointer;
 }
 
-/* BOTÃO VOLTAR */
+/* VOLTAR */
 .btn-voltar {
   position: absolute;
   top: 20px;
@@ -62,8 +61,7 @@ body {
 <audio id="musica" src="audio.mp3" loop></audio>
 
 <!-- PÁGINA 1 -->
-<div class="page" id="page1" style="display:flex;">
-  <img src="pagina1.png">
+<div class="page" id="page1" style="display:block; background-image:url('pagina1.png');">
   <div class="hotspot" style="top:0;left:0;width:100%;height:100%;" onclick="startInvite()"></div>
 </div>
 
@@ -73,63 +71,18 @@ body {
 </div>
 
 <!-- PÁGINA 3 -->
-<div class="page" id="page3">
-  <img src="pagina3.jpg">
+<div class="page" id="page3" style="background-image:url('pagina3.jpg');">
 
-  <!-- BOTÃO 1 – LOCALIZAÇÃO -->
   <a class="hotspot"
      style="bottom:18%; left:16%;"
      href="https://maps.app.goo.gl/VSxQm9TZKh1fF9gn9"
      target="_blank"></a>
 
-  <!-- BOTÃO 2 – CONFIRMAR PRESENÇA -->
   <a class="hotspot"
      style="bottom:18%; left:42%;"
      href="https://wa.me/5511947057844?text=Gostaria%20de%20confirmar%20presen%C3%A7a%20no%20anivers%C3%A1rio%20de%201%20aninho%20da%20Emanuelly%20Vit%C3%B3ria"
      target="_blank"></a>
 
-  <!-- BOTÃO 3 – SUGESTÃO DE PRESENTE -->
   <div class="hotspot"
        style="bottom:18%; left:68%;"
-       onclick="goPage(4)"></div>
-</div>
-
-<!-- PÁGINA 4 -->
-<div class="page" id="page4">
-  <img src="pagina4.jpg">
-
-  <!-- BOTÃO VOLTAR -->
-  <div class="btn-voltar" onclick="goPage(3)"></div>
-</div>
-
-<script>
-const musica = document.getElementById('musica');
-const video = document.getElementById('video');
-
-function startInvite() {
-  musica.play();
-  goPage(2);
-  video.play();
-
-  video.onended = () => {
-    goPage(3);
-  };
-}
-
-function goPage(num) {
-  document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-  document.getElementById('page' + num).style.display = 'flex';
-}
-</script>
-
-</body>
-</html>
-
-
-
-
-
-
-
-
-
+       onclick="goPage(4)"></di
