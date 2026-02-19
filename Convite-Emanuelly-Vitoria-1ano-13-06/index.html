@@ -2,14 +2,12 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
     <title>Convite Emanuelly Vitoria</title>
     <meta property="og:title" content="Convite especial: Pedro - 1 Ano">
     <meta property="og:description" content="Toque para abrir os detalhes deste dia incrível.">
     <meta property="og:image" content="https://crispoparte.com.br/pedro/capalink.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
 
     <style>
@@ -21,42 +19,64 @@
 
         body {
             background: #000;
+            /* Uso de dvh para evitar saltos na interface do mobile */
+            height: 100dvh;
+            width: 100vw;
             overflow: hidden;
             font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
+        /* Container que mantém a proporção da arte sem cortar */
         .page {
             display: none;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100dvh;
             position: relative;
+            max-width: 500px; /* Limite opcional para não esticar demais em tablets */
+            margin: 0 auto;
         }
 
+        /* Ajuste para que a imagem/vídeo fiquem contidos sem cortes laterais */
         .page img,
         .page video {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; 
+            display: block;
         }
 
-        /* BOTÕES INVISÍVEIS */
+        /* Wrapper para os botões acompanharem a imagem exatamente */
+        .content-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* BOTÕES EM PORCENTAGEM (Relativos ao container da imagem) */
         .hotspot {
             position: absolute;
-            width: 70px;
-            height: 70px;
             cursor: pointer;
-            /* background: rgba(255,0,0,0.3); <- Remova o comentário para ver as áreas de clique */
+            z-index: 10;
+            /* background: rgba(255,0,0,0.3); */ /* Debug: tire o comentário para ajustar posição */
         }
 
         /* BOTÃO VOLTAR */
         .btn-voltar {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 48px;
-            height: 48px;
+            top: 5%;
+            right: 5%;
+            width: 12%;
+            aspect-ratio: 1/1;
             border-radius: 50%;
             cursor: pointer;
+            z-index: 20;
+            /* background: rgba(255,255,255,0.2); */
         }
     </style>
 </head>
@@ -66,36 +86,43 @@
 <audio id="musica" src="audio.mp3" loop></audio>
 
 <div class="page" id="page1" style="display:block;">
-    <img src="pagina1.png">
-    <div class="hotspot" style="top:0;left:0;width:100%;height:100%;" onclick="startInvite()"></div>
+    <div class="content-wrapper" onclick="startInvite()">
+        <img src="pagina1.png">
+        <div class="hotspot" style="top:0; left:0; width:100%; height:100%;"></div>
+    </div>
 </div>
 
 <div class="page" id="page2">
-    <video id="video" src="pagina2.mp4" playsinline></video>
+    <div class="content-wrapper">
+        <video id="video" src="pagina2.mp4" playsinline webkit-playsinline></video>
+    </div>
 </div>
 
 <div class="page" id="page3">
-    <img src="pagina3.jpg">
+    <div class="content-wrapper">
+        <img src="pagina3.jpg">
 
-    <a class="hotspot"
-       style="bottom:18%; left:16%;"
-       href="https://maps.app.goo.gl/VSxQm9TZKh1fF9gn9"
-       target="_blank"></a>
+        <a class="hotspot"
+           style="bottom:18%; left:16%; width:20%; height:10%;"
+           href="https://www.google.com/maps/search/?api=1&query=Localização"
+           target="_blank"></a>
 
-    <a class="hotspot"
-       style="bottom:18%; left:42%;"
-       href="https://wa.me/5511947057844?text=Gostaria%20de%20confirmar%20presen%C3%A7a%20no%20anivers%C3%A1rio%20de%201%20aninho%20da%20Emanuelly%20Vit%C3%B3ria"
-       target="_blank"></a>
+        <a class="hotspot"
+           style="bottom:18%; left:40%; width:20%; height:10%;"
+           href="https://wa.me/5511947057844?text=Gostaria%20de%20confirmar%20presen%C3%A7a"
+           target="_blank"></a>
 
-    <div class="hotspot"
-         style="bottom:18%; left:68%;"
-         onclick="goPage(4)"></div>
+        <div class="hotspot"
+             style="bottom:18%; left:64%; width:20%; height:10%;"
+             onclick="goPage(4)"></div>
+    </div>
 </div>
 
 <div class="page" id="page4">
-    <img src="pagina4.jpg">
-
-    <div class="btn-voltar" onclick="goPage(3)"></div>
+    <div class="content-wrapper">
+        <img src="pagina4.jpg">
+        <div class="btn-voltar" onclick="goPage(3)"></div>
+    </div>
 </div>
 
 <script>
@@ -103,23 +130,17 @@
     const video = document.getElementById('video');
 
     function startInvite() {
-        // Inicia a música
-        musica.play().catch(e => console.log("Áudio bloqueado pelo navegador até interação"));
-        
-        // Vai para a página do vídeo
+        musica.play().catch(e => console.log("Áudio aguardando interação"));
         goPage(2);
         video.play();
 
-        // Quando o vídeo terminar, vai para a página de informações
         video.onended = () => {
             goPage(3);
         };
     }
 
     function goPage(num) {
-        // Esconde todas as páginas
         document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-        // Mostra a página desejada
         const targetPage = document.getElementById('page' + num);
         if (targetPage) {
             targetPage.style.display = 'block';
