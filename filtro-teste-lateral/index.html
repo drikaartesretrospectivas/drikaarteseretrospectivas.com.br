@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-    <title>Teste Lateral</title>
+    <title>Lucca 2 Anos</title>
     <style>
         :root { --accent: #25D366; --record: #ff0000; --boom: #e1306c; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -12,71 +12,43 @@
         .stage { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; touch-action: none; }
         
         #camera { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.1s linear; }
-        #camera.mirrored { transform: scaleX(-1); }
         
         #editorCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 7; background: #000; display: none; }
         #canvasPreview, #videoPreview { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background: black; display: none; z-index: 10; }
         #molduraImagePreview { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: bottom; pointer-events: none; z-index: 15; display: none; }
         #canvasFinal { display: none; }
         
-        /* UI LAYER AJUSTADA PARA A DIREITA */
-        .ui-layer { 
-            position: absolute; 
-            inset: 0; 
-            pointer-events: none; 
-            z-index: 30; 
-            display: flex; 
-            flex-direction: row; 
-            justify-content: flex-end; 
-            padding: 20px; 
-        }
+        /* UI LAYER */
+        .ui-layer { position: absolute; inset: 0; pointer-events: none; z-index: 30; }
 
         .top-bar { position: absolute; top: 40px; left: 20px; pointer-events: auto; }
         
-        /* TIMER CENTRALIZADO NA BASE */
         #videoTimer { 
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 0, 0, 0.7); 
-            padding: 5px 15px; 
-            border-radius: 10px; 
-            font-weight: bold; 
-            font-size: 18px; 
-            display: none; 
-            animation: pulse 1s infinite;
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 0, 0, 0.7); padding: 5px 15px; border-radius: 10px; 
+            font-weight: bold; font-size: 18px; display: none; animation: pulse 1s infinite;
         }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
 
-        .boom-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); padding: 25px; border-radius: 20px; display: none; z-index: 100; border: 2px solid var(--boom); text-align: center; }
-        
-        /* CONTROLES NA VERTICAL */
-        .controls-bottom { 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            pointer-events: auto; 
-            height: 100%;
+        /* POSICIONAMENTO LATERAL DIREITO */
+        .controls-right { 
+            position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 20px; pointer-events: auto; 
         }
-
-        .btn-ui { padding: 10px 20px; background: rgba(0,0,0,0.6); border: 1px solid #fff; border-radius: 20px; color: #fff; cursor: pointer; backdrop-filter: blur(5px); }
         
         .capture-controls { display: flex; flex-direction: column; gap: 20px; align-items: center; }
-        
+
+        .btn-ui { padding: 10px 20px; background: rgba(0,0,0,0.6); border: 1px solid #fff; border-radius: 20px; color: #fff; cursor: pointer; }
         .btn-photo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #fff; background: rgba(255,255,255,0.2); font-size: 24px; cursor: pointer; }
         .btn-boom { width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--boom); background: rgba(225, 48, 108, 0.2); font-size: 28px; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; }
         .btn-gallery { width: 50px; height: 50px; border-radius: 10px; border: 1px solid #fff; background: rgba(0,0,0,0.5); font-size: 20px; cursor: pointer; }
-
         .btn-video { width: 70px; height: 70px; border-radius: 50%; border: 5px solid #fff; background: rgba(255,255,255,0.1); cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .btn-video.recording { border-color: var(--record); background: rgba(255,0,0,0.3); }
         .stop-square { width: 25px; height: 25px; background: red; border-radius: 4px; }
         
-        #editUI { display: none; pointer-events: auto; text-align: center; flex-direction: column; justify-content: space-between; padding: 40px 20px; }
         #resultUI { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 50px; z-index: 40; background: rgba(0,0,0,0.85); }
         .actions-box { display: flex; flex-direction: column; gap: 15px; width: 85%; pointer-events: auto; }
-        .btn-res { padding: 20px; border-radius: 15px; border: none; font-weight: bold; font-size: 18px; cursor: pointer; text-align: center; text-decoration: none; color: #fff; }
+        .btn-res { padding: 20px; border-radius: 15px; border: none; font-weight: bold; font-size: 18px; cursor: pointer; text-align: center; color: #fff; text-decoration: none; }
         
         #startScreen { position: absolute; inset: 0; background: #000 url('capajpg.jpg') center/cover no-repeat; display: flex; align-items: center; justify-content: center; z-index: 100; }
         #startBtn { padding: 25px 55px; font-size: 24px; font-weight: bold; border: none; background: #FF5722; color: #fff; border-radius: 50px; cursor: pointer; }
@@ -91,7 +63,6 @@
     <canvas id="canvasFinal"></canvas>
     <video id="videoPreview" playsinline controls loop></video>
     <img id="molduraImagePreview" src="" />
-    <div class="boom-loading" id="boomLoading">🚀 Criando seu Boomerang...</div>
 
     <div class="ui-layer" id="cameraUI" style="display:none;">
         <div class="top-bar">
@@ -100,7 +71,7 @@
         
         <div id="videoTimer">00:00</div>
 
-        <div class="controls-bottom">
+        <div class="controls-right">
             <div class="capture-controls">
                 <button id="galleryBtn" class="btn-gallery">🖼️</button>
                 <input type="file" id="fileInput" accept="image/*" style="display:none;">
@@ -111,14 +82,6 @@
                 </button>
                 <button id="boomerangBtn" class="btn-boom">∞</button>
             </div>
-        </div>
-    </div>
-
-    <div class="ui-layer" id="editUI">
-        <div style="background:rgba(0,0,0,0.5); padding:10px; border-radius:10px; pointer-events:none;">Ajuste sua foto (Arraste e Zoom)</div>
-        <div class="actions-box" style="width:100%">
-            <button id="confirmEditBtn" class="btn-res" style="background:var(--accent);">✅ CONFIRMAR</button>
-            <button id="cancelEditBtn" class="btn-res" style="background:#444;">❌ CANCELAR</button>
         </div>
     </div>
 
@@ -133,20 +96,70 @@
 </div>
 
 <script>
-// O restante do seu JavaScript permanece idêntico, 
-// pois as funções de lógica não dependem da posição visual dos botões.
 let usingFrontCamera = true, stream = null, isRecording = false, mediaRecorder = null, recordedChunks = [];
-let currentFileUrl = null, boomFrames = [], currentType = 'image';
-let recordStartTime, timerInterval;
-const BOOM_CAPTURE_TIME = 1200; 
+let currentFileUrl = null, currentType = 'image';
 
-let currentScale = 1, startDistance = 0, baseScale = 1;
-let isEditingGallery = false, galleryImg = new Image(), animId = null;
-let galleryTransform = { x: 0, y: 0, sc: 1, lx: 0, ly: 0, ld: 0 };
-
-const video = document.getElementById('camera'), 
+const video = document.getElementById('camera'),
       canvasFinal = document.getElementById('canvasFinal'),
-      canvasPreview = document.getElementById('canvasPreview'),
-      videoPreview = document.getElementById('videoPreview'),
-      molduraImg = document.getElementById('molduraImagePreview'),
-      editorCanvas = document.getElementById('editor
+      ctxFinal = canvasFinal.getContext('2d'),
+      molduraImg = document.getElementById('molduraImagePreview');
+
+// INICIAR CÂMERA
+async function initCamera() {
+    if (stream) stream.getTracks().forEach(t => t.stop());
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: usingFrontCamera ? 'user' : 'environment', width: 1280, height: 720 },
+            audio: true
+        });
+        video.srcObject = stream;
+        video.play();
+        document.getElementById('startScreen').style.display = 'none';
+        document.getElementById('cameraUI').style.display = 'block';
+        molduraImg.src = 'moldura1.png';
+        molduraImg.style.display = 'block';
+    } catch (e) {
+        alert("Erro ao acessar câmera: " + e.message);
+    }
+}
+
+document.getElementById('startBtn').onclick = initCamera;
+document.getElementById('switchBtn').onclick = () => { usingFrontCamera = !usingFrontCamera; initCamera(); };
+
+// TIRAR FOTO
+function takePhoto() {
+    canvasFinal.width = 1080; canvasFinal.height = 1920;
+    const ctx = canvasFinal.getContext('2d');
+    
+    ctx.save();
+    if (usingFrontCamera) { ctx.translate(1080, 0); ctx.scale(-1, 1); }
+    ctx.drawImage(video, 0, 0, 1080, 1920);
+    ctx.restore();
+    if (molduraImg.complete) ctx.drawImage(molduraImg, 0, 0, 1080, 1920);
+
+    canvasFinal.toBlob(blob => {
+        currentFileUrl = URL.createObjectURL(blob);
+        showResult(currentFileUrl, 'image');
+    }, 'image/png');
+}
+
+function showResult(url, type) {
+    document.getElementById('cameraUI').style.display = 'none';
+    document.getElementById('resultUI').style.display = 'flex';
+    const preview = document.getElementById('canvasPreview');
+    preview.style.display = 'block';
+    preview.width = window.innerWidth; preview.height = window.innerHeight;
+    preview.getContext('2d').drawImage(canvasFinal, 0, 0, preview.width, preview.height);
+    
+    document.getElementById('downloadBtn').onclick = () => {
+        const a = document.createElement('a'); a.href = url;
+        a.download = `foto_${Date.now()}.png`;
+        a.click();
+    };
+}
+
+document.getElementById('newBtn').onclick = () => location.reload();
+document.getElementById('capturePhotoBtn').onclick = takePhoto;
+</script>
+</body>
+</html>
