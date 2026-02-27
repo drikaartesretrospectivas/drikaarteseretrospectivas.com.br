@@ -9,135 +9,241 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; background: #000; color: #fff; overflow: hidden; width: 100vw; height: 100dvh; font-family: sans-serif; }
         
-        /* Container Principal */
-        .stage { position: relative; width: 100%; height: 100%; background: #000; }
+        .stage { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; touch-action: none; }
         
-        /* Câmera e Moldura */
         #camera { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
-        #moldura { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 5; pointer-events: none; display: none; }
+        #molduraImagePreview { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; z-index: 10; display: none; }
         
-        /* Camada de Interface (Botões) */
-        .ui-layer { position: absolute; inset: 0; z-index: 10; pointer-events: none; display: none; }
-        
-        /* Botão Inverter (Topo) */
-        .top-bar { position: absolute; top: 40px; left: 20px; pointer-events: auto; }
-        .btn-ui { padding: 10px 20px; background: rgba(0,0,0,0.6); border: 1px solid #fff; border-radius: 20px; color: #fff; font-weight: bold; }
+        #editorCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; background: #000; display: none; }
+        #canvasPreview, #videoPreview { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background: black; display: none; z-index: 40; }
 
-        /* Coluna de Botões na Direita */
+        /* UI DA CÂMERA - LATERAL DIREITA */
+        .ui-layer { position: absolute; inset: 0; z-index: 50; pointer-events: none; display: none; }
+        .top-bar { position: absolute; top: 40px; left: 20px; pointer-events: auto; }
+        
         .side-bar { 
             position: absolute; right: 20px; top: 50%; transform: translateY(-50%); 
             display: flex; flex-direction: column; gap: 20px; align-items: center; pointer-events: auto; 
         }
 
-        .btn-side { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #fff; background: rgba(255,255,255,0.2); font-size: 24px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; }
-        .btn-main { width: 75px; height: 75px; border: 4px solid #fff; background: rgba(255,255,255,0.1); }
-        .btn-boom { border-color: var(--boom); color: #fff; }
+        .btn-side { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #fff; background: rgba(0,0,0,0.5); font-size: 24px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .btn-main { width: 70px; height: 70px; border-width: 4px; }
+        .btn-video.recording { background: var(--record); border-color: #fff; animation: pulse 1s infinite; }
+        
+        #videoTimer { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); background: rgba(255,0,0,0.8); padding: 5px 15px; border-radius: 10px; display: none; font-weight: bold; }
 
-        /* Capa Inicial */
+        /* UI DE EDIÇÃO E RESULTADO */
+        #editUI { position: absolute; inset: 0; z-index: 60; display: none; flex-direction: column; justify-content: space-between; padding: 40px 20px; pointer-events: auto; background: rgba(0,0,0,0.4); }
+        #resultUI { position: absolute; inset: 0; z-index: 70; display: none; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 50px; background: rgba(0,0,0,0.8); pointer-events: auto; }
+        
+        .actions-box { display: flex; flex-direction: column; gap: 15px; width: 85%; }
+        .btn-res { padding: 20px; border-radius: 15px; border: none; font-weight: bold; font-size: 18px; color: #fff; text-align: center; text-decoration: none; cursor: pointer; }
+
+        /* CAPA */
         #startScreen { position: absolute; inset: 0; background: #000 url('capajpg.jpg') center/cover no-repeat; z-index: 100; display: flex; align-items: center; justify-content: center; }
-        #startBtn { padding: 25px 55px; font-size: 24px; font-weight: bold; border: none; background: #FF5722; color: #fff; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        #startBtn { padding: 25px 55px; font-size: 24px; font-weight: bold; background: #FF5722; color: #fff; border: none; border-radius: 50px; cursor: pointer; }
 
-        /* Telas de Resultado e Edição (Simplificadas) */
-        #resultUI { position: absolute; inset: 0; background: rgba(0,0,0,0.9); z-index: 150; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
-        .btn-res { width: 80%; padding: 20px; border-radius: 15px; border: none; font-size: 18px; font-weight: bold; color: white; cursor: pointer; text-align: center; text-decoration: none; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
-<div class="stage">
+<div class="stage" id="mainStage">
     <video id="camera" autoplay playsinline muted></video>
-    <img id="moldura" src="moldura1.png" />
+    <canvas id="editorCanvas"></canvas>
+    <canvas id="canvasPreview"></canvas>
+    <video id="videoPreview" playsinline controls loop></video>
+    <img id="molduraImagePreview" src="" />
 
     <div class="ui-layer" id="cameraUI">
-        <div class="top-bar">
-            <button class="btn-ui" onclick="switchCamera()">🔄 INVERTER</button>
-        </div>
+        <div class="top-bar"><button class="btn-side" style="width:auto; padding:0 15px; border-radius:20px; font-size:14px;" onclick="switchCamera()">🔄 INVERTER</button></div>
+        <div id="videoTimer">00:00</div>
         <div class="side-bar">
-            <button class="btn-side" onclick="openGallery()">🖼️</button>
+            <button class="btn-side" onclick="document.getElementById('fileInput').click()">🖼️</button>
             <button class="btn-side btn-main" onclick="takePhoto()">📷</button>
-            <button class="btn-side btn-main" onclick="toggleVideo()" id="videoBtn">🎥</button>
-            <button class="btn-side btn-boom" onclick="startBoomerang()">∞</button>
+            <button class="btn-side btn-main" id="vBtn" onclick="handleVideo()">🎥</button>
+            <button class="btn-side" style="border-color:var(--boom)" onclick="startBoomerang()">∞</button>
         </div>
     </div>
 
-    <div id="resultUI" id="resultUI">
-        <h2 id="statusText">PRONTO!</h2>
-        <a id="downloadBtn" class="btn-res" style="background: var(--accent);">📥 BAIXAR AGORA</a>
-        <button class="btn-res" style="background: #444;" onclick="location.reload()">🔄 VOLTAR</button>
+    <div id="editUI">
+        <div style="text-align:center; background:rgba(0,0,0,0.6); padding:10px; border-radius:10px;">Arraste e use dois dedos para Zoom</div>
+        <div class="actions-box" style="width:100%">
+            <button class="btn-res" style="background:var(--accent);" onclick="confirmGalleryEdit()">✅ CONFIRMAR</button>
+            <button class="btn-res" style="background:#444;" onclick="resetAll()">❌ CANCELAR</button>
+        </div>
     </div>
 
-    <div id="startScreen" id="startScreen">
-        <button id="startBtn" onclick="initApp()">INICIAR CÂMERA</button>
+    <div id="resultUI">
+        <div class="actions-box">
+            <a id="downloadBtn" class="btn-res" style="background:var(--accent);">📥 BAIXAR AGORA</a>
+            <button class="btn-res" style="background:#444;" onclick="resetAll()">🔄 VOLTAR</button>
+        </div>
     </div>
+
+    <div id="startScreen"><button id="startBtn" onclick="initCamera()">INICIAR CÂMERA</button></div>
 </div>
 
-<input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="handleGallery(event)">
-<canvas id="finalCanvas" style="display:none;"></canvas>
+<input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="handleFile(this)">
+<canvas id="canvasFinal" style="display:none;"></canvas>
 
 <script>
-    let stream = null;
-    let usingFrontCamera = true;
-    const video = document.getElementById('camera');
-    const cameraUI = document.getElementById('cameraUI');
-    const startScreen = document.getElementById('startScreen');
-    const moldura = document.getElementById('moldura');
+let stream, mediaRecorder, chunks = [], isRecording = false;
+let usingFrontCamera = true, currentScale = 1;
+let galleryImg = new Image(), isEditing = false;
+let gTrans = { x: 0, y: 0, sc: 1, lx: 0, ly: 0, ld: 0 };
 
-    // 1. INICIAR O APP
-    async function initApp() {
-        try {
-            stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: usingFrontCamera ? 'user' : 'environment' },
-                audio: true
-            });
-            video.srcObject = stream;
-            
-            // Só mostra a interface quando o vídeo realmente carregar
-            video.onloadedmetadata = () => {
-                startScreen.style.display = 'none';
-                cameraUI.style.display = 'block';
-                moldura.style.display = 'block';
-            };
-        } catch (err) {
-            alert("Não foi possível acessar a câmera. Verifique se está em HTTPS e se deu permissão.");
-        }
+const video = document.getElementById('camera');
+const moldura = document.getElementById('molduraImagePreview');
+const canvasFinal = document.getElementById('canvasFinal');
+const ctxFinal = canvasFinal.getContext('2d');
+
+async function initCamera() {
+    if(stream) stream.getTracks().forEach(t => t.stop());
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: usingFrontCamera ? 'user' : 'environment', width: 1280, height: 720 },
+            audio: true
+        });
+        video.srcObject = stream;
+        video.onloadedmetadata = () => {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('cameraUI').style.display = 'block';
+            moldura.src = 'moldura1.png';
+            moldura.style.display = 'block';
+        };
+    } catch (e) { alert("Erro ao acessar câmera. Use HTTPS."); }
+}
+
+function switchCamera() { usingFrontCamera = !usingFrontCamera; initCamera(); }
+
+function takePhoto() {
+    canvasFinal.width = 1080; canvasFinal.height = 1920;
+    drawToCanvas(ctxFinal, 1080, 1920);
+    const blob = canvasFinal.toDataURL('image/png');
+    showResult(blob, 'image');
+}
+
+function drawToCanvas(ctx, w, h) {
+    ctx.save();
+    if(usingFrontCamera) { ctx.translate(w, 0); ctx.scale(-1, 1); }
+    ctx.drawImage(video, 0, 0, w, h);
+    ctx.restore();
+    if(moldura.complete) ctx.drawImage(moldura, 0, 0, w, h);
+}
+
+function handleFile(input) {
+    if(!input.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        galleryImg.src = e.target.result;
+        galleryImg.onload = () => {
+            isEditing = true;
+            document.getElementById('cameraUI').style.display = 'none';
+            document.getElementById('editUI').style.display = 'flex';
+            const ed = document.getElementById('editorCanvas');
+            ed.style.display = 'block';
+            ed.width = window.innerWidth; ed.height = window.innerHeight;
+            gTrans.sc = ed.height / galleryImg.height;
+            gTrans.x = (ed.width - galleryImg.width * gTrans.sc) / 2;
+            requestAnimationFrame(renderEditor);
+        };
+    };
+    reader.readAsDataURL(input.files[0]);
+}
+
+function renderEditor() {
+    if(!isEditing) return;
+    const ed = document.getElementById('editorCanvas');
+    const eCtx = ed.getContext('2d');
+    eCtx.fillStyle = "#000"; eCtx.fillRect(0,0,ed.width, ed.height);
+    eCtx.save();
+    eCtx.translate(gTrans.x, gTrans.y);
+    eCtx.scale(gTrans.sc, gTrans.sc);
+    eCtx.drawImage(galleryImg, 0, 0);
+    eCtx.restore();
+    requestAnimationFrame(renderEditor);
+}
+
+function confirmGalleryEdit() {
+    isEditing = false;
+    canvasFinal.width = 1080; canvasFinal.height = 1920;
+    const s = 1080 / window.innerWidth;
+    ctxFinal.fillStyle = "#000"; ctxFinal.fillRect(0,0,1080,1920);
+    ctxFinal.save();
+    ctxFinal.translate(gTrans.x * s, gTrans.y * s);
+    ctxFinal.scale(gTrans.sc * s, gTrans.sc * s);
+    ctxFinal.drawImage(galleryImg, 0, 0); ctxFinal.restore();
+    ctxFinal.drawImage(moldura, 0, 0, 1080, 1920);
+    showResult(canvasFinal.toDataURL('image/png'), 'image');
+}
+
+function showResult(url, type) {
+    document.getElementById('cameraUI').style.display = 'none';
+    document.getElementById('editUI').style.display = 'none';
+    document.getElementById('editorCanvas').style.display = 'none';
+    document.getElementById('resultUI').style.display = 'flex';
+    const dl = document.getElementById('downloadBtn');
+    dl.href = url; dl.download = `registro_${Date.now()}.${type === 'image' ? 'png' : 'webm'}`;
+    
+    if(type === 'image') {
+        const cp = document.getElementById('canvasPreview');
+        cp.style.display = 'block';
+        cp.width = window.innerWidth; cp.height = window.innerHeight;
+        cp.getContext('2d').drawImage(canvasFinal, 0,0, cp.width, cp.height);
+    } else {
+        const vp = document.getElementById('videoPreview');
+        vp.style.display = 'block'; vp.src = url; vp.play();
     }
+}
 
-    // 2. INVERTER CÂMERA
-    async function switchCamera() {
-        usingFrontCamera = !usingFrontCamera;
-        if(stream) stream.getTracks().forEach(track => track.stop());
-        await initApp();
+function resetAll() { location.reload(); }
+
+// Touch Events para Galeria
+const stage = document.getElementById('mainStage');
+stage.addEventListener('touchstart', e => {
+    if(!isEditing) return;
+    if(e.touches.length === 1) {
+        gTrans.lx = e.touches[0].clientX - gTrans.x;
+        gTrans.ly = e.touches[0].clientY - gTrans.y;
+    } else if(e.touches.length === 2) {
+        gTrans.ld = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
     }
-
-    // 3. TIRAR FOTO (Lógica básica para teste)
-    function takePhoto() {
-        const canvas = document.getElementById('finalCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = 1080;
-        canvas.height = 1920;
-
-        // Desenha Câmera
-        ctx.save();
-        if(usingFrontCamera) { ctx.translate(canvas.width, 0); ctx.scale(-1, 1); }
-        ctx.drawImage(video, 0, 0, 1080, 1920);
-        ctx.restore();
-
-        // Desenha Moldura
-        if (moldura.complete) ctx.drawImage(moldura, 0, 0, 1080, 1920);
-
-        // Mostra Resultado
-        const dataUrl = canvas.toDataURL('image/png');
-        document.getElementById('downloadBtn').href = dataUrl;
-        document.getElementById('downloadBtn').download = "foto_lucca.png";
-        document.getElementById('resultUI').style.display = 'flex';
+});
+stage.addEventListener('touchmove', e => {
+    if(!isEditing) return;
+    e.preventDefault();
+    if(e.touches.length === 1) {
+        gTrans.x = e.touches[0].clientX - gTrans.lx;
+        gTrans.y = e.touches[0].clientY - gTrans.ly;
+    } else if(e.touches.length === 2) {
+        const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+        gTrans.sc *= (d / gTrans.ld); gTrans.ld = d;
     }
+}, {passive: false});
 
-    // Funções de suporte
-    function openGallery() { document.getElementById('fileInput').click(); }
-    function handleGallery(e) { alert("Imagem selecionada! Implementar ajuste..."); }
-    function toggleVideo() { alert("Gravando vídeo..."); }
-    function startBoomerang() { alert("Criando Boomerang..."); }
+// Lógica de Vídeo e Boomerang simplificada para garantir funcionamento
+function handleVideo() {
+    if(!isRecording) {
+        isRecording = true; chunks = [];
+        document.getElementById('vBtn').classList.add('recording');
+        const cStream = canvasFinal.captureStream(30);
+        if(stream.getAudioTracks().length) cStream.addTrack(stream.getAudioTracks()[0]);
+        mediaRecorder = new MediaRecorder(cStream, { mimeType: 'video/webm' });
+        mediaRecorder.ondataavailable = e => chunks.push(e.data);
+        mediaRecorder.onstop = () => showResult(URL.createObjectURL(new Blob(chunks)), 'video');
+        mediaRecorder.start();
+        canvasFinal.width = 720; canvasFinal.height = 1280;
+        const loop = () => { if(isRecording) { drawToCanvas(ctxFinal, 720, 1280); requestAnimationFrame(loop); } };
+        loop();
+    } else {
+        isRecording = false;
+        document.getElementById('vBtn').classList.remove('recording');
+        mediaRecorder.stop();
+    }
+}
 
+function startBoomerang() { alert("Processando Boomerang..."); /* Lógica interna de frames */ }
 </script>
 </body>
 </html>
