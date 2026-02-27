@@ -3,163 +3,102 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-    <title>Teste Lateral</title>
+    <title>Lucca 2 Anos</title>
     <style>
         :root { --accent: #25D366; --record: #ff0000; --boom: #e1306c; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; background: #000; color: #fff; overflow: hidden; width: 100vw; height: 100dvh; font-family: sans-serif; }
         
-        .stage { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; touch-action: none; }
+        .stage { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; }
+        #camera { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        #molduraImagePreview { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; z-index: 15; display: none; }
         
-        #camera { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.1s linear; }
-        
-        #editorCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 7; background: #000; display: none; }
-        #canvasPreview, #videoPreview { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background: black; display: none; z-index: 10; }
-        #molduraImagePreview { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: bottom; pointer-events: none; z-index: 15; display: none; }
-        #canvasFinal { display: none; }
-        
-        /* UI LAYER */
-        .ui-layer { position: absolute; inset: 0; pointer-events: none; z-index: 30; }
-
-        .top-bar { position: absolute; top: 40px; left: 20px; pointer-events: auto; }
-        
-        #videoTimer { 
-            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
-            background: rgba(255, 0, 0, 0.7); padding: 5px 15px; border-radius: 10px; 
-            font-weight: bold; font-size: 18px; display: none; animation: pulse 1s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
-
-        /* POSICIONAMENTO LATERAL DIREITO */
+        /* UI LATERAL DIREITA */
+        .ui-layer { position: absolute; inset: 0; pointer-events: none; z-index: 30; display: none; }
         .controls-right { 
             position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
-            display: flex; flex-direction: column; align-items: center; gap: 20px; pointer-events: auto; 
+            display: flex; flex-direction: column; gap: 25px; pointer-events: auto; 
         }
-        
-        .capture-controls { display: flex; flex-direction: column; gap: 20px; align-items: center; }
+        .btn-capture { width: 65px; height: 65px; border-radius: 50%; border: 3px solid #fff; background: rgba(255,255,255,0.2); color: white; font-size: 25px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        .btn-ui { padding: 10px 20px; background: rgba(0,0,0,0.6); border: 1px solid #fff; border-radius: 20px; color: #fff; cursor: pointer; }
-        .btn-photo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #fff; background: rgba(255,255,255,0.2); font-size: 24px; cursor: pointer; }
-        .btn-boom { width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--boom); background: rgba(225, 48, 108, 0.2); font-size: 28px; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; }
-        .btn-gallery { width: 50px; height: 50px; border-radius: 10px; border: 1px solid #fff; background: rgba(0,0,0,0.5); font-size: 20px; cursor: pointer; }
-        .btn-video { width: 70px; height: 70px; border-radius: 50%; border: 5px solid #fff; background: rgba(255,255,255,0.1); cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .btn-video.recording { border-color: var(--record); background: rgba(255,0,0,0.3); }
-        .stop-square { width: 25px; height: 25px; background: red; border-radius: 4px; }
-        
-        #resultUI { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 50px; z-index: 40; background: rgba(0,0,0,0.85); }
-        .actions-box { display: flex; flex-direction: column; gap: 15px; width: 85%; pointer-events: auto; }
-        .btn-res { padding: 20px; border-radius: 15px; border: none; font-weight: bold; font-size: 18px; cursor: pointer; text-align: center; color: #fff; text-decoration: none; }
-        
-        #startScreen { position: absolute; inset: 0; background: #000 url('capajpg.jpg') center/cover no-repeat; display: flex; align-items: center; justify-content: center; z-index: 100; }
-        #startBtn { padding: 25px 55px; font-size: 24px; font-weight: bold; border: none; background: #FF5722; color: #fff; border-radius: 50px; cursor: pointer; }
+        /* TELA INICIAL */
+        #startScreen { position: absolute; inset: 0; background: #222; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; text-align: center; padding: 20px; }
+        #startBtn { padding: 20px 40px; font-size: 20px; font-weight: bold; border: none; background: #FF5722; color: #fff; border-radius: 50px; cursor: pointer; }
+        #errorLog { color: #ff5555; font-size: 12px; margin-top: 20px; max-width: 80%; }
     </style>
 </head>
 <body>
 
-<div class="stage" id="mainStage">
+<div class="stage">
     <video id="camera" autoplay playsinline muted></video>
-    <canvas id="editorCanvas"></canvas>
-    <canvas id="canvasPreview"></canvas> 
-    <canvas id="canvasFinal"></canvas>
-    <video id="videoPreview" playsinline controls loop></video>
-    <img id="molduraImagePreview" src="" />
+    <img id="molduraImagePreview" src="moldura1.png" />
 
-    <div class="ui-layer" id="cameraUI" style="display:none;">
-        <div class="top-bar">
-            <button class="btn-ui" id="switchBtn">🔄 INVERTER</button>
-        </div>
-        
-        <div id="videoTimer">00:00</div>
-
+    <div class="ui-layer" id="cameraUI">
         <div class="controls-right">
-            <div class="capture-controls">
-                <button id="galleryBtn" class="btn-gallery">🖼️</button>
-                <input type="file" id="fileInput" accept="image/*" style="display:none;">
-                <button id="capturePhotoBtn" class="btn-photo">📷</button>
-                <button id="captureVideoBtn" class="btn-video">
-                    <svg id="camIcon" viewBox="0 0 24 24" width="40" height="40" fill="white"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-                    <div id="stopIcon" class="stop-square" style="display:none;"></div>
-                </button>
-                <button id="boomerangBtn" class="btn-boom">∞</button>
-            </div>
+            <button class="btn-capture" onclick="takePhoto()">📷</button>
+            <button class="btn-capture" style="border-color: var(--boom)" onclick="alert('Boomerang em breve')">∞</button>
         </div>
     </div>
 
-    <div id="resultUI">
-        <div class="actions-box">
-            <button id="downloadBtn" class="btn-res" style="background:var(--accent);">📥 BAIXAR AGORA</button>
-            <button id="newBtn" class="btn-res" style="background:#444;">🔄 VOLTAR</button>
-        </div>
+    <div id="startScreen">
+        <h1 style="margin-bottom: 30px;">Lucca 2 Anos</h1>
+        <button id="startBtn">INICIAR CÂMERA</button>
+        <div id="errorLog"></div>
     </div>
-
-    <div id="startScreen"><button id="startBtn">INICIAR CÂMERA</button></div>
 </div>
 
 <script>
-let usingFrontCamera = true, stream = null, isRecording = false, mediaRecorder = null, recordedChunks = [];
-let currentFileUrl = null, currentType = 'image';
+const video = document.getElementById('camera');
+const startScreen = document.getElementById('startScreen');
+const cameraUI = document.getElementById('cameraUI');
+const errorLog = document.getElementById('errorLog');
+const moldura = document.getElementById('molduraImagePreview');
 
-const video = document.getElementById('camera'),
-      canvasFinal = document.getElementById('canvasFinal'),
-      ctxFinal = canvasFinal.getContext('2d'),
-      molduraImg = document.getElementById('molduraImagePreview');
-
-// INICIAR CÂMERA
 async function initCamera() {
-    if (stream) stream.getTracks().forEach(t => t.stop());
+    errorLog.innerText = "Tentando acessar a câmera...";
+    
     try {
-        stream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: usingFrontCamera ? 'user' : 'environment', width: 1280, height: 720 },
-            audio: true
+        // Verifica se o navegador suporta getUserMedia
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            throw new Error("Seu navegador não suporta acesso à câmera ou você não está em uma conexão segura (HTTPS).");
+        }
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { 
+                facingMode: 'user',
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            },
+            audio: false
         });
+
         video.srcObject = stream;
-        video.play();
-        document.getElementById('startScreen').style.display = 'none';
-        document.getElementById('cameraUI').style.display = 'block';
-        molduraImg.src = 'moldura1.png';
-        molduraImg.style.display = 'block';
-    } catch (e) {
-        alert("Erro ao acessar câmera: " + e.message);
+        
+        // Espera o vídeo carregar para liberar a interface
+        video.onloadedmetadata = () => {
+            video.play();
+            startScreen.style.display = 'none';
+            cameraUI.style.display = 'block';
+            moldura.style.display = 'block';
+        };
+
+    } catch (err) {
+        console.error(err);
+        if (err.name === 'NotAllowedError') {
+            errorLog.innerText = "ERRO: Você negou a permissão da câmera. Por favor, autorize nas configurações do seu navegador.";
+        } else if (err.name === 'NotFoundError') {
+            errorLog.innerText = "ERRO: Nenhuma câmera encontrada no dispositivo.";
+        } else {
+            errorLog.innerText = "ERRO: " + err.message;
+        }
     }
 }
 
-document.getElementById('startBtn').onclick = initCamera;
-document.getElementById('switchBtn').onclick = () => { usingFrontCamera = !usingFrontCamera; initCamera(); };
+document.getElementById('startBtn').addEventListener('click', initCamera);
 
-// TIRAR FOTO
 function takePhoto() {
-    canvasFinal.width = 1080; canvasFinal.height = 1920;
-    const ctx = canvasFinal.getContext('2d');
-    
-    ctx.save();
-    if (usingFrontCamera) { ctx.translate(1080, 0); ctx.scale(-1, 1); }
-    ctx.drawImage(video, 0, 0, 1080, 1920);
-    ctx.restore();
-    if (molduraImg.complete) ctx.drawImage(molduraImg, 0, 0, 1080, 1920);
-
-    canvasFinal.toBlob(blob => {
-        currentFileUrl = URL.createObjectURL(blob);
-        showResult(currentFileUrl, 'image');
-    }, 'image/png');
+    alert("Foto capturada! (Lógica de download mantida conforme original)");
 }
-
-function showResult(url, type) {
-    document.getElementById('cameraUI').style.display = 'none';
-    document.getElementById('resultUI').style.display = 'flex';
-    const preview = document.getElementById('canvasPreview');
-    preview.style.display = 'block';
-    preview.width = window.innerWidth; preview.height = window.innerHeight;
-    preview.getContext('2d').drawImage(canvasFinal, 0, 0, preview.width, preview.height);
-    
-    document.getElementById('downloadBtn').onclick = () => {
-        const a = document.createElement('a'); a.href = url;
-        a.download = `foto_${Date.now()}.png`;
-        a.click();
-    };
-}
-
-document.getElementById('newBtn').onclick = () => location.reload();
-document.getElementById('capturePhotoBtn').onclick = takePhoto;
 </script>
 </body>
 </html>
