@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <title>Lucca 2 Anos</title>
+    <style>
+        :root { --accent: #25D366; --record: #ff0000; --boom: #e1306c; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; background: #000; color: #fff; overflow: hidden; width: 100vw; height: 100dvh; font-family: sans-serif; }
+        
+        .stage { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; touch-action: none; }
+        
+        #camera { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.1s linear; }
+        #camera.mirrored { transform: scaleX(-1); }
+        
+        #editorCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 7; background: #000; display: none; }
+        #canvasPreview, #videoPreview { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background: black; display: none; z-index: 10; }
+        #molduraImagePreview { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: bottom; pointer-events: none; z-index: 15; display: none; }
+        #canvasFinal { display: none; }
+        
+        /* UI LAYER AJUSTADA PARA A DIREITA */
+        .ui-layer { 
+            position: absolute; 
+            inset: 0; 
+            pointer-events: none; 
+            z-index: 30; 
+            display: flex; 
+            flex-direction: row; 
+            justify-content: flex-end; 
+            padding: 20px; 
+        }
+
+        .top-bar { position: absolute; top: 40px; left: 20px; pointer-events: auto; }
+        
+        /* TIMER CENTRALIZADO NA BASE */
+        #videoTimer { 
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 0, 0, 0.7); 
+            padding: 5px 15px; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            font-size: 18px; 
+            display: none; 
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+        .boom-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); padding: 25px; border-radius: 20px; display: none; z-index: 100; border: 2px solid var(--boom); text-align: center; }
+        
+        /* CONTROLES NA VERTICAL */
+        .controls-bottom { 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            pointer-events: auto; 
+            height: 100%;
+        }
+
+        .btn-ui { padding: 10px 20px; background: rgba(0,0,0,0.6); border: 1px solid #fff; border-radius: 20px; color: #fff; cursor: pointer; backdrop-filter: blur(5px); }
+        
+        .capture-controls { display: flex; flex-direction: column; gap: 20px; align-items: center; }
+        
+        .btn-photo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #fff; background: rgba(255,255,255,0.2); font-size: 24px; cursor: pointer; }
+        .btn-boom { width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--boom); background: rgba(225, 48, 108, 0.2); font-size: 28px; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; }
+        .btn-gallery { width: 50px; height: 50px; border-radius: 10px; border: 1px solid #fff; background: rgba(0,0,0,0.5); font-size: 20px; cursor: pointer; }
+
+        .btn-video { width: 70px; height: 70px; border-radius: 50%; border: 5px solid #fff; background: rgba(255,255,255,0.1); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .btn-video.recording { border-color: var(--record); background: rgba(255,0,0,0.3); }
+        .stop-square { width: 25px; height: 25px; background: red; border-radius: 4px; }
+        
+        #editUI { display: none; pointer-events: auto; text-align: center; flex-direction: column; justify-content: space-between; padding: 40px 20px; }
+        #resultUI { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 50px; z-index: 40; background: rgba(0,0,0,0.85); }
+        .actions-box { display: flex; flex-direction: column; gap: 15px; width: 85%; pointer-events: auto; }
+        .btn-res { padding: 20px; border-radius: 15px; border: none; font-weight: bold; font-size: 18px; cursor: pointer; text-align: center; text-decoration: none; color: #fff; }
+        
+        #startScreen { position: absolute; inset: 0; background: #000 url('capajpg.jpg') center/cover no-repeat; display: flex; align-items: center; justify-content: center; z-index: 100; }
+        #startBtn { padding: 25px 55px; font-size: 24px; font-weight: bold; border: none; background: #FF5722; color: #fff; border-radius: 50px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="stage" id="mainStage">
+    <video id="camera" autoplay playsinline muted></video>
+    <canvas id="editorCanvas"></canvas>
+    <canvas id="canvasPreview"></canvas> 
+    <canvas id="canvasFinal"></canvas>
+    <video id="videoPreview" playsinline controls loop></video>
+    <img id="molduraImagePreview" src="" />
+    <div class="boom-loading" id="boomLoading">🚀 Criando seu Boomerang...</div>
+
+    <div class="ui-layer" id="cameraUI" style="display:none;">
+        <div class="top-bar">
+            <button class="btn-ui" id="switchBtn">🔄 INVERTER</button>
+        </div>
+        
+        <div id="videoTimer">00:00</div>
+
+        <div class="controls-bottom">
+            <div class="capture-controls">
+                <button id="galleryBtn" class="btn-gallery">🖼️</button>
+                <input type="file" id="fileInput" accept="image/*" style="display:none;">
+                <button id="capturePhotoBtn" class="btn-photo">📷</button>
+                <button id="captureVideoBtn" class="btn-video">
+                    <svg id="camIcon" viewBox="0 0 24 24" width="40" height="40" fill="white"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+                    <div id="stopIcon" class="stop-square" style="display:none;"></div>
+                </button>
+                <button id="boomerangBtn" class="btn-boom">∞</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-layer" id="editUI">
+        <div style="background:rgba(0,0,0,0.5); padding:10px; border-radius:10px; pointer-events:none;">Ajuste sua foto (Arraste e Zoom)</div>
+        <div class="actions-box" style="width:100%">
+            <button id="confirmEditBtn" class="btn-res" style="background:var(--accent);">✅ CONFIRMAR</button>
+            <button id="cancelEditBtn" class="btn-res" style="background:#444;">❌ CANCELAR</button>
+        </div>
+    </div>
+
+    <div id="resultUI">
+        <div class="actions-box">
+            <button id="downloadBtn" class="btn-res" style="background:var(--accent);">📥 BAIXAR AGORA</button>
+            <button id="newBtn" class="btn-res" style="background:#444;">🔄 VOLTAR</button>
+        </div>
+    </div>
+
+    <div id="startScreen"><button id="startBtn">INICIAR CÂMERA</button></div>
+</div>
+
+<script>
+// O restante do seu JavaScript permanece idêntico, 
+// pois as funções de lógica não dependem da posição visual dos botões.
+let usingFrontCamera = true, stream = null, isRecording = false, mediaRecorder = null, recordedChunks = [];
+let currentFileUrl = null, boomFrames = [], currentType = 'image';
+let recordStartTime, timerInterval;
+const BOOM_CAPTURE_TIME = 1200; 
+
+let currentScale = 1, startDistance = 0, baseScale = 1;
+let isEditingGallery = false, galleryImg = new Image(), animId = null;
+let galleryTransform = { x: 0, y: 0, sc: 1, lx: 0, ly: 0, ld: 0 };
+
+const video = document.getElementById('camera'), 
+      canvasFinal = document.getElementById('canvasFinal'),
+      canvasPreview = document.getElementById('canvasPreview'),
+      videoPreview = document.getElementById('videoPreview'),
+      molduraImg = document.getElementById('molduraImagePreview'),
+      editorCanvas = document.getElementById('editor
