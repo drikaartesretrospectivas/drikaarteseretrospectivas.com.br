@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>Convite Maria Flor</title>
     <meta property="og:title" content="Convite especial: Luana - 8 Anos!">
@@ -18,20 +18,29 @@
             --cor-botao-x: #9b59b6; 
             --cor-botao-som: #9b59b6; /* Cor do botão de áudio */
             --distancia-botoes-rodape: 200px;
-            --espaco-entre-botoes: 40px; /* Aumentado conforme solicitado */
+            --espaco-entre-botoes: 40px; 
             --tamanho-clicavel: 75px; 
         }
 
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: sans-serif; background: #000; }
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: hidden; 
+            font-family: sans-serif; 
+            background: #000; 
+        }
 
-        /* Estrutura das Telas */
+        /* Estrutura das Telas - Ajustado para preencher tudo */
         .page {
             position: fixed;
             top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background-size: contain;
+            width: 100%; 
+            height: 100%;
+            background-size: cover; /* Ajusta para cobrir toda a tela sem faixas */
             background-repeat: no-repeat;
-            background-position: center;
+            background-position: center top; /* Foca no topo/centro para não cortar cabeças */
             display: none;
         }
 
@@ -86,7 +95,7 @@
         .btn-x {
             position: absolute;
             top: 25px;
-            left: 25px; /* Mudei para a esquerda para não conflitar com o som, ou pode manter no mesmo lugar */
+            left: 25px; 
             width: 50px;
             height: 50px;
             background-color: var(--cor-botao-x);
@@ -112,9 +121,9 @@
         .copyright { display: none !important; visibility: hidden; pointer-events: none; }
     </style>
 </head>
-<body onclick="iniciarAudioAutomatico()">
+<body onclick="iniciarAudioAutomatico()" ontouchstart="iniciarAudioAutomatico()">
 
-    <audio id="musica" loop>
+    <audio id="musica" loop preload="auto">
         <source src="audio.mp3" type="audio/mpeg">
     </audio>
 
@@ -123,7 +132,7 @@
     <div id="principal" class="page active">
         <div class="hotspot-container">
             <div class="hotspot" onclick="window.open('https://wa.me/5511915672331?text=Gostaria%20de%20confirmar%20presen%C3%A7a%20no%20anivers%C3%A1rio%20de%208%20anos%20da%20Maria%20Flor')"></div>
-            <div class="hotspot" onclick="window.open('https://maps.app.goo.gl/R8MFm3Netd3gEo4K8')"></div>
+            <div class="hotspot" onclick="window.open('https://www.google.com/maps')"></div>
             <div class="hotspot" onclick="irParaSugestao()"></div>
         </div>
     </div>
@@ -132,29 +141,22 @@
         <button class="btn-x" onclick="irParaPrincipal()">✕</button>
     </div>
 
-    <div class="copyright" aria-hidden="true">
-        © 2026 Cristiane Oliveira. Todos os direitos reservados. 
-        Este software, design e algoritmos estão protegidos pela Lei de Direitos Autorais (Lei nº 9.610/98). 
-        A extração, cópia ou redistribuição deste código sem autorização expressa da Cristiane Oliveira é terminantemente proibida.
-    </div>
-
     <script>
         const audio = document.getElementById('musica');
         const btnAudio = document.getElementById('audioControl');
         let audioIniciado = false;
 
-        // Inicia o áudio no primeiro clique na página
         function iniciarAudioAutomatico() {
             if (!audioIniciado) {
-                audio.play();
-                audioIniciado = true;
-                btnAudio.innerHTML = "🔊";
+                audio.play().then(() => {
+                    audioIniciado = true;
+                    btnAudio.innerHTML = "🔊";
+                }).catch(error => console.log("Aguardando interação real..."));
             }
         }
 
-        // Função de Play/Pause
         function toggleAudio(event) {
-            event.stopPropagation(); // Impede que o clique dispare o iniciarAudioAutomatico
+            event.stopPropagation(); 
             if (audio.paused) {
                 audio.play();
                 btnAudio.innerHTML = "🔊";
