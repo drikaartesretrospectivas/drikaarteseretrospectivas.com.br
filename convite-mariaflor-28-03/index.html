@@ -2,12 +2,12 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
     <title>Convite Maria Flor</title>
     <meta property="og:title" content="Convite especial: Luana - 8 Anos!">
     <meta property="og:description" content="Toque para abrir os detalhes deste dia incrível.">
-    <meta property="og:image" content="https://crispoparte.com.br/luana/capalink.png">
+    <meta property="og:image" content="https://https://drikaartesretrospectivas.com.br/luana/capalink.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
@@ -16,34 +16,57 @@
         :root {
             /* EDIÇÃO MANUAL */
             --cor-botao-x: #9b59b6; 
-            --cor-botao-som: #9b59b6; /* Cor do botão de áudio */
-            --distancia-botoes-rodape: 200px;
-            --espaco-entre-botoes: 40px; /* Aumentado conforme solicitado */
-            --tamanho-clicavel: 75px; 
+            --cor-botao-som: #9b59b6;
+            --tamanho-clicavel: 18%; /* Ajustado para % para manter escala */
+            --posicao-vertical-botoes: 78%; /* Ajuste aqui a altura dos botões na arte */
         }
 
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: sans-serif; background: #000; }
+        /* Uso de dvh para evitar saltos e cortes no Safari/Chrome Mobile */
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            height: 100dvh; 
+            overflow: hidden; 
+            font-family: sans-serif; 
+            background: #000; 
+        }
 
-        /* Estrutura das Telas */
+        /* Wrapper para garantir que a arte use object-fit: contain */
         .page {
             position: fixed;
             top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
+            width: 100%;
+            height: 100dvh;
             display: none;
+            justify-content: center;
+            align-items: center;
         }
 
-        .active { display: block; }
+        .active { display: flex; }
 
-        #principal { background-image: url('pagina.png'); }
-        #sugestao { background-image: url('pagina2.png'); background-color: #fff; }
+        /* Container da imagem que mantém a proporção */
+        .media-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-        /* Botão de Som (Superior Direito) */
+        .media-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Garante que a arte não corte nas laterais */
+        }
+
+        /* Botão de Som (Superior Direito) - Ajustado para Safe Area do iOS */
         .btn-audio {
             position: fixed;
-            top: 25px;
+            top: env(safe-area-inset-top, 25px);
             right: 25px;
             width: 45px;
             height: 45px;
@@ -61,19 +84,30 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Container dos Hotspots */
+        /* Container dos Hotspots relativo à imagem visível */
+        .hotspot-area {
+            position: absolute;
+            top: 0;
+            /* O segredo da responsividade: o container de botões tem o mesmo aspect ratio da arte */
+            aspect-ratio: 9/16; /* Ajuste para o formato da sua imagem (ex: 1080x1920) */
+            height: 100%;
+            max-width: 100vw;
+        }
+
         .hotspot-container {
             position: absolute;
-            bottom: var(--distancia-botoes-rodape);
+            bottom: 15%; /* Ajuste fino da altura do grupo de botões */
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: var(--espaco-entre-botoes);
+            gap: 15px;
+            width: 80%;
+            justify-content: center;
         }
 
         .hotspot {
-            width: var(--tamanho-clicavel);
-            height: var(--tamanho-clicavel);
+            width: 60px; /* Tamanho fixo ou em % da largura do container */
+            height: 60px;
             background: rgba(255, 255, 255, 0); 
             border-radius: 50%;
             cursor: pointer;
@@ -82,11 +116,10 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Botão X (Página 2) */
         .btn-x {
             position: absolute;
-            top: 25px;
-            left: 25px; /* Mudei para a esquerda para não conflitar com o som, ou pode manter no mesmo lugar */
+            top: env(safe-area-inset-top, 25px);
+            left: 25px;
             width: 50px;
             height: 50px;
             background-color: var(--cor-botao-x);
@@ -109,33 +142,34 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
         }
 
-        .copyright { display: none !important; visibility: hidden; pointer-events: none; }
+        .copyright { display: none !important; }
     </style>
 </head>
 <body onclick="iniciarAudioAutomatico()">
 
-    <audio id="musica" loop>
-        <source src="audio.mp3" type="audio/mpeg">
+    <audio id="musica" loop playsinline> <source src="audio.mp3" type="audio/mpeg">
     </audio>
 
     <button class="btn-audio" onclick="toggleAudio(event)" id="audioControl">🔊</button>
 
     <div id="principal" class="page active">
-        <div class="hotspot-container">
-            <div class="hotspot" onclick="window.open('https://wa.me/5511915672331?text=Gostaria%20de%20confirmar%20presen%C3%A7a%20no%20anivers%C3%A1rio%20de%208%20anos%20da%20Maria%20Flor')"></div>
-            <div class="hotspot" onclick="window.open('https://maps.app.goo.gl/R8MFm3Netd3gEo4K8')"></div>
-            <div class="hotspot" onclick="irParaSugestao()"></div>
+        <div class="media-container">
+            <img src="pagina.png" alt="Convite Principal">
+            <div class="hotspot-area">
+                <div class="hotspot-container">
+                    <div class="hotspot" onclick="window.open('https://wa.me/5511915672331?text=Gostaria%20de%20confirmar%20presen%C3%A7a%20no%20anivers%C3%A1rio%20de%208%20anos%20da%20Maria%20Flor')"></div>
+                    <div class="hotspot" onclick="window.open('https://maps.app.goo.gl/R8MFm3Netd3gEo4K8')"></div>
+                    <div class="hotspot" onclick="irParaSugestao()"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <div id="sugestao" class="page">
-        <button class="btn-x" onclick="irParaPrincipal()">✕</button>
-    </div>
-
-    <div class="copyright" aria-hidden="true">
-        © 2026 Cristiane Oliveira. Todos os direitos reservados. 
-        Este software, design e algoritmos estão protegidos pela Lei de Direitos Autorais (Lei nº 9.610/98). 
-        A extração, cópia ou redistribuição deste código sem autorização expressa da Cristiane Oliveira é terminantemente proibida.
+        <div class="media-container">
+            <img src="pagina2.png" alt="Sugestão de Presentes">
+            <button class="btn-x" onclick="irParaPrincipal()">✕</button>
+        </div>
     </div>
 
     <script>
@@ -143,18 +177,16 @@
         const btnAudio = document.getElementById('audioControl');
         let audioIniciado = false;
 
-        // Inicia o áudio no primeiro clique na página
         function iniciarAudioAutomatico() {
             if (!audioIniciado) {
-                audio.play();
+                audio.play().catch(e => console.log("Aguardando interação"));
                 audioIniciado = true;
                 btnAudio.innerHTML = "🔊";
             }
         }
 
-        // Função de Play/Pause
         function toggleAudio(event) {
-            event.stopPropagation(); // Impede que o clique dispare o iniciarAudioAutomatico
+            event.stopPropagation();
             if (audio.paused) {
                 audio.play();
                 btnAudio.innerHTML = "🔊";
