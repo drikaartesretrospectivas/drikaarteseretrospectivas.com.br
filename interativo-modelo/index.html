@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Convite Luana - 8 Anos</title>
+    <meta property="og:title" content="Convite especial: Luana - 8 Anos!">
+    <meta property="og:description" content="Toque para abrir os detalhes deste dia incrível.">
+    <meta property="og:image" content="https://crispoparte.com.br/luana/capalink.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+
+    <style>
+        :root {
+            /* EDIÇÃO MANUAL */
+            --cor-botao-x: #9b59b6; 
+            --cor-botao-som: #9b59b6; /* Cor do botão de áudio */
+            --distancia-botoes-rodape: 200px;
+            --espaco-entre-botoes: 40px; /* Aumentado conforme solicitado */
+            --tamanho-clicavel: 75px; 
+        }
+
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: sans-serif; background: #000; }
+
+        /* Estrutura das Telas */
+        .page {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            display: none;
+        }
+
+        .active { display: block; }
+
+        #principal { background-image: url('pagina.png'); }
+        #sugestao { background-image: url('pagina2.png'); background-color: #fff; }
+
+        /* Botão de Som (Superior Direito) */
+        .btn-audio {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 45px;
+            height: 45px;
+            background-color: var(--cor-botao-som);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 9999;
+            border: none;
+            font-size: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Container dos Hotspots */
+        .hotspot-container {
+            position: absolute;
+            bottom: var(--distancia-botoes-rodape);
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: var(--espaco-entre-botoes);
+        }
+
+        .hotspot {
+            width: var(--tamanho-clicavel);
+            height: var(--tamanho-clicavel);
+            background: rgba(255, 255, 255, 0); 
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Botão X (Página 2) */
+        .btn-x {
+            position: absolute;
+            top: 25px;
+            left: 25px; /* Mudei para a esquerda para não conflitar com o som, ou pode manter no mesmo lugar */
+            width: 50px;
+            height: 50px;
+            background-color: var(--cor-botao-x);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+            font-size: 22px;
+            animation: pulse 1.5s infinite;
+            z-index: 9998;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(155, 89, 182, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(0, 0, 0, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+        }
+
+        .copyright { display: none !important; visibility: hidden; pointer-events: none; }
+    </style>
+</head>
+<body onclick="iniciarAudioAutomatico()">
+
+    <audio id="musica" loop>
+        <source src="audio.mp3" type="audio/mpeg">
+    </audio>
+
+    <button class="btn-audio" onclick="toggleAudio(event)" id="audioControl">🔊</button>
+
+    <div id="principal" class="page active">
+        <div class="hotspot-container">
+            <div class="hotspot" onclick="window.open('https://wa.me/5571993233142?text=confirmo%20presença%20neste%20dia%20especial')"></div>
+            <div class="hotspot" onclick="window.open('https://maps.app.goo.gl/AvxVqge85ax4M46U9')"></div>
+            <div class="hotspot" onclick="irParaSugestao()"></div>
+        </div>
+    </div>
+
+    <div id="sugestao" class="page">
+        <button class="btn-x" onclick="irParaPrincipal()">✕</button>
+    </div>
+
+    <div class="copyright" aria-hidden="true">
+        © 2026 Cristiane Oliveira. Todos os direitos reservados. 
+        Este software, design e algoritmos estão protegidos pela Lei de Direitos Autorais (Lei nº 9.610/98). 
+        A extração, cópia ou redistribuição deste código sem autorização expressa da Cristiane Oliveira é terminantemente proibida.
+    </div>
+
+    <script>
+        const audio = document.getElementById('musica');
+        const btnAudio = document.getElementById('audioControl');
+        let audioIniciado = false;
+
+        // Inicia o áudio no primeiro clique na página
+        function iniciarAudioAutomatico() {
+            if (!audioIniciado) {
+                audio.play();
+                audioIniciado = true;
+                btnAudio.innerHTML = "🔊";
+            }
+        }
+
+        // Função de Play/Pause
+        function toggleAudio(event) {
+            event.stopPropagation(); // Impede que o clique dispare o iniciarAudioAutomatico
+            if (audio.paused) {
+                audio.play();
+                btnAudio.innerHTML = "🔊";
+            } else {
+                audio.pause();
+                btnAudio.innerHTML = "🔇";
+            }
+        }
+
+        function irParaSugestao() {
+            document.getElementById('principal').classList.remove('active');
+            document.getElementById('sugestao').classList.add('active');
+        }
+
+        function irParaPrincipal() {
+            document.getElementById('sugestao').classList.remove('active');
+            document.getElementById('principal').classList.add('active');
+        }
+    </script>
+</body>
+</html>
