@@ -1,32 +1,38 @@
-<!DOCTYPE html>                                                                                                                                                                                                               <!--
+<!DOCTYPE html>
+<!--
 © 2026 Cristiane Oliveira
 Material exclusivo para alunos.
 Proibida reprodução, distribuição ou revenda.
 Lei 9.610/98 – Direitos Autorais.
--->                                                                                                                                                                                                                
+-->
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Giovanna 15 anos</title>
+    
+    <title>Convite Leticia 15 anos</title>
 
     <style>
+        /* =========================================================
+           1. ÁREA DE EDIÇÃO DE CORES (PARA AS ALUNAS)
+           =========================================================
+        */
         :root {
-            --cor-botao: #ffffff;
-            --aspect-ratio: 9 / 16;
-            --tempo-transicao: 0.8s; /* Velocidade do fade */
+            --cor-do-botao: #ffffff; /* Altere aqui a cor do círculo */
+            --cor-do-icone: #000000; /* Altere aqui a cor do ícone (som/pause) */
         }
 
-        /* RESET */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+            -webkit-tap-highlight-color: transparent; /* Remove o brilho azul ao clicar no Android/iOS */
         }
 
         body {
             background: #000;
+            /* Suporte para navegadores que não entendem dvh */
+            height: 100vh;
             height: 100dvh;
             width: 100vw;
             overflow: hidden;
@@ -36,28 +42,21 @@ Lei 9.610/98 – Direitos Autorais.
             align-items: center;
         }
 
-        /* CONFIGURAÇÃO DE TRANSIÇÃO */
         .page {
             display: none;
             width: 100%;
-            height: 100dvh;
-            position: absolute; /* Mudado para absolute para sobrepor durante o fade */
-            max-width: 500px;
-            opacity: 0;
-            transition: opacity var(--tempo-transicao) ease-in-out;
-            z-index: 1;
+            height: 100%;
+            position: relative;
+            max-width: 500px; 
+            margin: 0 auto;
         }
 
-        .page.active {
+        .page img,
+        .page video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; 
             display: block;
-            opacity: 1;
-            z-index: 2;
-        }
-
-        /* 🔴 MODO EDIÇÃO */
-        body.modo-edicao .hotspot {
-            border: 2px dashed red;
-            background: rgba(255,0,0,0.2);
         }
 
         .content-wrapper {
@@ -69,81 +68,56 @@ Lei 9.610/98 – Direitos Autorais.
             align-items: center;
         }
 
-        .media-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            max-height: 100dvh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .media-container img,
-        .media-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-
-        .interactive-area {
-            position: absolute;
-            aspect-ratio: var(--aspect-ratio);
-            height: 100%;
-            max-width: 100%;
-        }
-
-        .btn-audio {
-            position: fixed;
-            top: env(safe-area-inset-top, 30px);
-            left: 20px;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background-color: rgba(0,0,0,0.5);
-            border: 2px solid #ffffff;
-            color: #ffffff;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            z-index: 1000;
-            font-size: 18px;
-            animation: pulse-white 2s infinite;
-        }
-
-        /* Novo: Estilo para o Botão Fechar (X) da Página 4 */
-        .btn-fechar {
-            position: absolute;
-            top: 20px; /* Distância do topo dentro da área interativa */
-            right: 20px; /* Distância da direita dentro da área interativa */
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background-color: rgba(0,0,0,0.6);
-            border: 2px solid #ffffff;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            z-index: 100;
-            font-size: 20px;
-            font-weight: bold;
-            pointer-events: auto; /* Garante que o clique funcione */
-        }
-
-        @keyframes pulse-white {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255,255,255,0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255,255,255,0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255,255,255,0); }
-        }
-
         .hotspot {
             position: absolute;
             cursor: pointer;
             z-index: 10;
+        }
+
+        .btn-voltar {
+            position: absolute;
+            top: 5%;
+            right: 5%;
+            width: 12%;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 20;
+        }
+
+        /* =========================================================
+           ESTILO DO BOTÃO FLUTUANTE (AJUSTADO PARA SAFARI/CHROME)
+           =========================================================
+        */
+        #btn-musica {
+            position: fixed;
+            /* env(safe-area-inset-top) garante que não fique embaixo da câmera do iPhone */
+            top: calc(2% + env(safe-area-inset-top));
+            left: 5%;
+            width: 45px;
+            height: 45px;
+            background-color: var(--cor-do-botao);
+            border-radius: 50%;
+            z-index: 100;
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            cursor: pointer;
+            animation: pulse-simples 2s infinite;
+            border: none;
+            outline: none;
+        }
+
+        .icon-play { width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 12px solid var(--cor-do-icone); margin-left: 4px; }
+        
+        .icon-pause { display: flex; gap: 4px; }
+        .icon-pause div { width: 4px; height: 15px; background-color: var(--cor-do-icone); }
+
+        @keyframes pulse-simples {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -152,118 +126,111 @@ Lei 9.610/98 – Direitos Autorais.
 
 <audio id="musica" src="audio.mp3" loop preload="auto"></audio>
 
-<div id="btnControleAudio" class="btn-audio" onclick="toggleAudio()">
-    <span id="iconeAudio">▶</span>
+<div id="btn-musica" onclick="toggleMusica()">
+    <div id="container-icone">
+        <div class="icon-pause"><div></div><div></div></div>
+    </div>
 </div>
 
-<div class="page active" id="page1">
+<div class="page" id="page1" style="display:block;">
     <div class="content-wrapper" onclick="startInvite()">
-        <div class="media-container">
-            <img src="pagina1.jpg">
-            <div class="interactive-area">
-                <div class="hotspot" style="top:0; left:0; width:100%; height:100%;"></div>
-            </div>
-        </div>
+        <img src="pagina1.jpg">
+        <div class="hotspot" style="top:0; left:0; width:100%; height:100%;"></div>
     </div>
 </div>
 
 <div class="page" id="page2">
     <div class="content-wrapper">
-        <div class="media-container">
-            <video id="video" src="pagina2.mp4" playsinline webkit-playsinline muted preload="auto"></video>
-        </div>
+        <video id="video" src="pagina2.mp4" playsinline webkit-playsinline preload="auto"></video>
     </div>
 </div>
 
 <div class="page" id="page3">
     <div class="content-wrapper">
-        <div class="media-container">
-            <img src="pagina3.jpg">
-            <div class="interactive-area">
-                <div class="hotspot" 
-                   style="top:63%; left:50%; width:40%; height:10%; transform:translateX(-50%);" 
-                   onclick="goPage(4)">
-                </div>
-            </div>
-        </div>
+        <img src="pagina3.jpg">
+
+        <a class="hotspot"
+           style="bottom:28%; left:18%; width:15%; height:12%;"
+           href="https://wa.me/5571993233142?text=Gostaria%20de%20confirmar%20presen%C3%A7a"
+           target="_blank"></a>
+
+        <a class="hotspot"
+           style="bottom:28%; left:35%; width:15%; height:12%;"
+            href="https://maps.app.goo.gl/EshGCckwocacXL189"
+           target="_blank"></a>
+
+        <div class="hotspot"
+             style="bottom:28%; left:51%; width:15%; height:12%;"
+             onclick="goPage(4)"></div>
+
+        <div class="hotspot" 
+             style="bottom:28%; left:68%; width:15%; height:12%;" 
+             onclick="goPage(5)"></div>
     </div>
 </div>
 
 <div class="page" id="page4">
     <div class="content-wrapper">
-        <div class="media-container">
-            <img src="pagina4.jpg">
-            <div class="interactive-area">
-                <div class="btn-fechar" onclick="goPage(3)">✕</div>
-            </div>
-        </div>
+        <img src="pagina4.jpg">
+        <div class="btn-voltar" onclick="goPage(3)"></div>
+    </div>
+</div>
+
+<div class="page" id="page5">
+    <div class="content-wrapper">
+        <img src="pagina5.jpg">
+        <div class="btn-voltar" onclick="goPage(3)"></div>
     </div>
 </div>
 
 <script>
     const musica = document.getElementById('musica');
     const video = document.getElementById('video');
-    const btnAudio = document.getElementById('btnControleAudio');
-    const iconeAudio = document.getElementById('iconeAudio');
+    const btnMusica = document.getElementById('btn-musica');
+    const containerIcone = document.getElementById('container-icone');
 
     function startInvite() {
-        musica.play().catch(e => console.log("Audio play blocked"));
-        btnAudio.style.display = 'flex';
-        iconeAudio.innerText = "II";
-
+        // iOS exige que o play ocorra dentro de uma função de clique
+        musica.play().then(() => {
+            btnMusica.style.display = 'flex';
+        }).catch(e => {
+            console.log("Autoplay bloqueado, aguardando interação.");
+        });
+        
         goPage(2);
-        video.play();
+        
+        // Garante que o vídeo toque mesmo em modo de economia de energia
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                // Se falhar (comum no Safari), tenta tocar mudo para não travar a experiência
+                video.muted = true;
+                video.play();
+            });
+        }
 
         video.onended = () => {
             goPage(3);
         };
     }
 
-    function toggleAudio() {
+    function toggleMusica() {
         if (musica.paused) {
             musica.play();
-            iconeAudio.innerText = "II";
-            btnAudio.style.animation = "pulse-white 2s infinite";
+            containerIcone.innerHTML = '<div class="icon-pause"><div></div><div></div></div>';
         } else {
             musica.pause();
-            iconeAudio.innerText = "▶";
-            btnAudio.style.animation = "none";
+            containerIcone.innerHTML = '<div class="icon-play"></div>';
         }
     }
 
-    // Função goPage preservada, adicionado o tratamento de tempo para garantir o fade
     function goPage(num) {
-        const pages = document.querySelectorAll('.page');
+        document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
         const targetPage = document.getElementById('page' + num);
-
-        // Remove a classe ativa de todas as páginas
-        pages.forEach(p => {
-            p.classList.remove('active');
-            // Timeout para esconder o display após o fade out. 
-            // Usamos 800ms para casar com a variável CSS --tempo-transicao
-            setTimeout(() => { 
-                if(!p.classList.contains('active')) {
-                    p.style.display = 'none'; 
-                }
-            }, 800);
-        });
-
-        // Ativa a nova página
         if (targetPage) {
             targetPage.style.display = 'block';
-            // Pequeno delay para o browser processar o display:block antes da opacidade
-            // Isso é vital para o efeito de fade funcionar
-            setTimeout(() => {
-                targetPage.classList.add('active');
-            }, 50); // Aumentado levemente para maior estabilidade
         }
     }
-
-    document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "visible" && !musica.paused) {
-            musica.play();
-        }
-    });
 </script>
 
 </body>
