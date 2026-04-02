@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<!--
+© 2026 Cristiane Oliveira
+Material exclusivo para alunos.
+Proibida reprodução, distribuição ou revenda.
+Lei 9.610/98 – Direitos Autorais.
+-->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Giovanna Maria 15 anos</title>
+
+    <style>
+        :root {
+            --cor-botao-musica: rgba(255, 255, 255, 0.8);
+            --cor-icone: #1a2a6c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #000;
+            height: 100dvh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Camada de Brilhos */
+        #canvas-brilhos {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Estilo das Páginas */
+        .page {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            max-width: 500px; 
+            margin: 0 auto;
+        }
+
+        /* Animação suave de entrada */
+        .fade-in {
+            animation: fadeInEffect 0.8s ease-in-out;
+        }
+
+        @keyframes fadeInEffect {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .page img, .page video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; 
+            display: block;
+        }
+
+        .content-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .btn-voltar {
+            position: absolute;
+            top: 5%;
+            right: 8%;
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 18px;
+            border: 1px solid white;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Botão de Música */
+        #btn-musica {
+            position: fixed;
+            top: 25px;
+            left: 20px;
+            width: 45px;
+            height: 45px;
+            background-color: var(--cor-botao-musica);
+            border-radius: 50%;
+            z-index: 999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            border: none;
+            animation: pulse-suave 2s infinite;
+        }
+
+        .icon-play { width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 12px solid var(--cor-icone); margin-left: 4px; }
+        .icon-pause { display: flex; gap: 4px; }
+        .icon-pause div { width: 4px; height: 16px; background-color: var(--cor-icone); border-radius: 2px; }
+
+        @keyframes pulse-suave {
+            0% { transform: scale(1); }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+
+<body>
+
+<canvas id="canvas-brilhos"></canvas>
+
+<audio id="musica" src="audio.mp3" loop preload="auto"></audio>
+
+<button id="btn-musica" onclick="toggleMusica()">
+    <div id="container-icone">
+        <div class="icon-pause"><div></div><div></div></div>
+    </div>
+</button>
+
+<div class="page" id="page1" style="display:block;">
+    <div class="content-wrapper" onclick="startInvite()">
+        <img src="pagina1.jpg" alt="Capa">
+        <div class="hotspot" style="top:0; left:0; width:100%; height:100%;"></div>
+    </div>
+</div>
+
+<div class="page" id="page2">
+    <div class="content-wrapper">
+        <video id="video" src="pagina2.mp4" playsinline webkit-playsinline preload="auto"></video>
+    </div>
+</div>
+
+<div class="page" id="page3">
+    <div class="content-wrapper">
+        <img src="pagina3.jpg" alt="Menu">
+        <a class="hotspot" style="bottom: 39%; left: 28%; width: 20%; height: 11%;" href="https://wa.me/5571993233142?text=Olá!%20Confirmo%20minha%20presença!" target="_blank"></a>
+        <a class="hotspot" style="bottom: 39%; left: 52%; width: 20%; height: 11%;" href="https://maps.app.goo.gl/EshGCckwocacXL189"_blank"></a>
+        <div class="hotspot" style="bottom: 27%; left: 28%; width: 20%; height: 11%;" onclick="goPage(4)"></div>
+        <div class="hotspot" style="bottom: 27%; left: 52%; width: 20%; height: 11%;" onclick="goPage(5)"></div>
+    </div>
+</div>
+
+<div class="page" id="page4">
+    <div class="content-wrapper">
+        <img src="pagina4.jpg" alt="Presentes">
+        <div class="btn-voltar" onclick="goPage(3)">✖</div>
+    </div>
+</div>
+
+<div class="page" id="page5">
+    <div class="content-wrapper">
+        <img src="pagina5.jpg" alt="Traje">
+        <div class="btn-voltar" onclick="goPage(3)">✖</div>
+    </div>
+</div>
+
+<script>
+    const musica = document.getElementById('musica');
+    const video = document.getElementById('video');
+    const btnMusica = document.getElementById('btn-musica');
+    const canvas = document.getElementById('canvas-brilhos');
+    const ctx = canvas.getContext('2d');
+
+    let particles = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+        constructor() {
+            this.x = canvas.width / 2;
+            this.y = canvas.height / 2;
+            this.size = Math.random() * 4 + 1;
+            this.speedX = (Math.random() * 10) - 5;
+            this.speedY = (Math.random() * 10) - 5;
+            this.color = `hsl(${Math.random() * 40 + 40}, 100%, 70%)`;
+            this.opacity = 1;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            this.opacity -= 0.02;
+        }
+        draw() {
+            ctx.globalAlpha = this.opacity;
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = this.color;
+        }
+    }
+
+    function createExplosion() {
+        particles = [];
+        for (let i = 0; i < 200; i++) {
+            particles.push(new Particle());
+        }
+        animateParticles();
+    }
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+            if (particles[i].opacity <= 0) {
+                particles.splice(i, 1);
+                i--;
+            }
+        }
+        if (particles.length > 0) {
+            requestAnimationFrame(animateParticles);
+        } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    }
+
+    // Início do Convite: Sem explosão para o vídeo começar rápido
+    function startInvite() {
+        musica.play().then(() => { 
+            btnMusica.style.display = 'flex'; 
+        }).catch(e => console.log("Áudio aguardando interação"));
+        
+        // Transição direta para o vídeo
+        document.getElementById('page1').style.display = 'none';
+        document.getElementById('page2').style.display = 'block';
+        document.getElementById('page2').classList.add('fade-in');
+
+        video.play().catch(() => { 
+            video.muted = true; 
+            video.play(); 
+        });
+
+        video.onended = () => { 
+            goPage(3); // Brilhos voltam a partir daqui
+        };
+    }
+
+    function toggleMusica() {
+        if (musica.paused) {
+            musica.play();
+            document.getElementById('container-icone').innerHTML = '<div class="icon-pause"><div></div><div></div></div>';
+        } else {
+            musica.pause();
+            document.getElementById('container-icone').innerHTML = '<div class="icon-play"></div>';
+        }
+    }
+
+    // Função de troca de página com explosão de brilhos
+    function goPage(num) {
+        createExplosion();
+        
+        setTimeout(() => {
+            document.querySelectorAll('.page').forEach(p => {
+                p.style.display = 'none';
+                p.classList.remove('fade-in');
+            });
+            const target = document.getElementById('page' + num);
+            if (target) {
+                target.style.display = 'block';
+                target.classList.add('fade-in');
+            }
+        }, 150);
+    }
+</script>
+
+</body>
+</html>
