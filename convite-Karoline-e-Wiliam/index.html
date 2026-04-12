@@ -190,6 +190,35 @@ function goPage(num) {
 // Bloqueio de clique direito
 document.addEventListener('contextmenu', e => e.preventDefault());
 </script>
+    <style>
+  #skip-btn {
+    position:fixed; bottom:calc(28px + env(safe-area-inset-bottom,0px)); right:calc(20px + env(safe-area-inset-right,0px));
+    z-index:40; height:46px; padding:0 18px; border-radius:23px;
+    border:1.5px solid rgba(201,169,110,.45); background:rgba(8,8,8,.65);
+    color:var(--gold-light); display:none; align-items:center; justify-content:center;
+    cursor:pointer; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.2em; text-transform:uppercase;
+    transition:transform .1s; -webkit-tap-highlight-color:transparent;
+  }
+  #skip-btn:active { transform:scale(.88); }
+</style>
+
+<button id="skip-btn">Pular</button>
+
+<script>
+  // ✏️ EDITE AQUI — coloque o nome da página final
+  const PAGINA_FINAL = 'pagina3';
+
+  const skipBtn = document.getElementById('skip-btn');
+  overlay.addEventListener('click', () => { skipBtn.style.display = 'flex'; });
+  skipBtn.addEventListener('click', () => {
+    cancelAnimationFrame(kbRafId);
+    clearTimeout(sceneTimer);
+    document.getElementById('final-page').querySelector('.bg-img').src = PAGINA_FINAL;
+    showFinalPage();
+    skipBtn.style.display = 'none';
+  });
+</script>
 
 </body>
 </html>
