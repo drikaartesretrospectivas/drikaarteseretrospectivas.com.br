@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    
     <title>Convite Ana Luisa</title>
     
     <style>
         :root {
-            /* EDITE A COR AQUI */
             --cor-botao: #ffffff; 
         }
 
@@ -39,11 +37,18 @@
             margin: 0 auto;
         }
 
-        .page img,
-        .page video {
+        .page img {
             width: 100%;
             height: 100%;
             object-fit: contain; 
+            display: block;
+        }
+
+        /* Ajuste no vídeo para não sobrar bordas pretas na transição */
+        .page video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
             display: block;
         }
 
@@ -56,14 +61,12 @@
             align-items: center;
         }
 
-        /* ANIMAÇÃO PULSE */
         @keyframes pulse-white {
             0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
             70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
         }
 
-        /* BOTÃO PLAY/PAUSE */
         .btn-audio {
             position: fixed;
             top: 30px; 
@@ -80,13 +83,7 @@
             cursor: pointer;
             z-index: 1000;
             font-size: 18px;
-            /* Aplicação da animação */
             animation: pulse-white 2s infinite;
-        }
-
-        .btn-audio:active {
-            transform: scale(0.9);
-            animation: none; /* Para a animação ao clicar */
         }
 
         .hotspot { position: absolute; cursor: pointer; z-index: 10; }
@@ -102,6 +99,7 @@
     <span id="iconeAudio">II</span>
 </div>
 
+<!-- PAGINA 1 -->
 <div class="page" id="page1" style="display:block;">
     <div class="content-wrapper" onclick="startInvite()">
         <img src="pagina1.jpg">
@@ -109,22 +107,24 @@
     </div>
 </div>
 
+<!-- PAGINA 2 (VIDEO) -->
 <div class="page" id="page2">
     <div class="content-wrapper">
-        <video id="video" src="pagina2.mp4" playsinline webkit-playsinline muted></video>
+        <video id="video" src="pagina2.mp4" playsinline webkit-playsinline></video>
     </div>
 </div>
 
+<!-- PAGINA 3 -->
 <div class="page" id="page3">
     <div class="content-wrapper">
         <img src="pagina3.jpg">
         <a class="hotspot" style="bottom:30%; left:16%; width:20%; height:10%;" href="https://maps.app.goo.gl/hWiUi8mzMRatotBe9?g_st=aw" target="_blank"></a>
-        <a class="hotspot" style="bottom:30%; left:40%; width:20%; height:10%;" href="https://docs.google.com/forms/d/e/1FAIpQLSccUDorY1MvFhDgZeHmfwvUAWBfq1xzO2IJFuvPYztD1BmiGw/viewform?usp=sharing&ouid=110336282079626592248
-" target="_blank"></a>
+        <a class="hotspot" style="bottom:30%; left:40%; width:20%; height:10%;" href="https://docs.google.com/forms/d/e/1FAIpQLSccUDorY1MvFhDgZeHmfwvUAWBfq1xzO2IJFuvPYztD1BmiGw/viewform?usp=sharing&ouid=110336282079626592248" target="_blank"></a>
         <div class="hotspot" style="bottom:30%; left:64%; width:20%; height:10%;" onclick="goPage(4)"></div>
     </div>
 </div>
 
+<!-- PAGINA 4 -->
 <div class="page" id="page4">
     <div class="content-wrapper">
         <img src="pagina4.jpg">
@@ -139,15 +139,23 @@
     const iconeAudio = document.getElementById('iconeAudio');
 
     function startInvite() {
-        // Garantindo áudio no iOS
-        musica.play().catch(e => console.log("Áudio pendente"));
-        
+        musica.play().catch(e => console.log("Áudio bloqueado"));
         btnAudio.style.display = 'flex';
+        
         goPage(2);
         video.play();
 
+        // Detecta o fim do vídeo para trocar de página
         video.onended = () => {
             goPage(3);
+        };
+
+        // Segurança extra: se o vídeo travar no último frame, ele pula pra pag 3
+        video.ontimeupdate = () => {
+            if (video.currentTime >= video.duration - 0.1) {
+                goPage(3);
+                video.ontimeupdate = null; // Desativa para não repetir
+            }
         };
     }
 
@@ -155,11 +163,11 @@
         if (musica.paused) {
             musica.play();
             iconeAudio.innerText = "II";
-            btnAudio.style.animation = "pulse-white 2s infinite"; // Volta a pulsar no play
+            btnAudio.style.animation = "pulse-white 2s infinite";
         } else {
             musica.pause();
             iconeAudio.innerText = "▶";
-            btnAudio.style.animation = "none"; // Para de pulsar no pause (opcional)
+            btnAudio.style.animation = "none";
         }
     }
 
