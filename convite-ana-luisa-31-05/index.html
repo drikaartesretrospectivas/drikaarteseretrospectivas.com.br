@@ -6,16 +6,9 @@
     <title>Convite Ana Luisa</title>
     
     <style>
-        :root {
-            --cor-botao: #ffffff; 
-        }
+        :root { --cor-botao: #ffffff; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             background: #000;
@@ -23,50 +16,27 @@
             width: 100vw;
             overflow: hidden;
             font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .page {
             display: none;
             width: 100%;
             height: 100dvh;
-            position: relative;
+            position: absolute; /* Mudado para absolute para sobrepor */
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
             max-width: 500px;
-            margin: 0 auto;
         }
 
-        .page img {
+        .page img, .page video {
             width: 100%;
             height: 100%;
-            object-fit: contain; 
+            object-fit: cover; /* Garante que preencha tudo sem bordas */
             display: block;
         }
 
-        /* Ajuste no vídeo para não sobrar bordas pretas na transição */
-        .page video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; 
-            display: block;
-        }
-
-        .content-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        @keyframes pulse-white {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
-        }
-
+        /* Botão de áudio */
         .btn-audio {
             position: fixed;
             top: 30px; 
@@ -82,8 +52,13 @@
             align-items: center;
             cursor: pointer;
             z-index: 1000;
-            font-size: 18px;
             animation: pulse-white 2s infinite;
+        }
+
+        @keyframes pulse-white {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
         }
 
         .hotspot { position: absolute; cursor: pointer; z-index: 10; }
@@ -99,34 +74,31 @@
     <span id="iconeAudio">II</span>
 </div>
 
-<!-- PAGINA 1 -->
-<div class="page" id="page1" style="display:block;">
-    <div class="content-wrapper" onclick="startInvite()">
-        <img src="pagina1.jpg">
-        <div class="hotspot" style="top:0; left:0; width:100%; height:100%;"></div>
-    </div>
-</div>
-
-<!-- PAGINA 2 (VIDEO) -->
-<div class="page" id="page2">
-    <div class="content-wrapper">
-        <video id="video" src="pagina2.mp4" playsinline webkit-playsinline></video>
-    </div>
-</div>
-
-<!-- PAGINA 3 -->
-<div class="page" id="page3">
-    <div class="content-wrapper">
+<!-- PÁGINA 3 (Já fica carregada no fundo para não ter atraso no final do vídeo) -->
+<div class="page" id="page3" style="display:block; z-index: 1;">
+    <div style="position: relative; width: 100%; height: 100%;">
         <img src="pagina3.jpg">
         <a class="hotspot" style="bottom:30%; left:16%; width:20%; height:10%;" href="https://maps.app.goo.gl/hWiUi8mzMRatotBe9?g_st=aw" target="_blank"></a>
-        <a class="hotspot" style="bottom:30%; left:40%; width:20%; height:10%;" href="https://docs.google.com/forms/d/e/1FAIpQLSccUDorY1MvFhDgZeHmfwvUAWBfq1xzO2IJFuvPYztD1BmiGw/viewform?usp=sharing&ouid=110336282079626592248" target="_blank"></a>
+        <a class="hotspot" style="bottom:30%; left:40%; width:20%; height:10%;" href="https://docs.google.com/forms/d/e/1FAIpQLSccUDorY1MvFhDgZeHmfwvUAWBfq1xzO2IJFuvPYztD1BmiGw/viewform?usp=sharing" target="_blank"></a>
         <div class="hotspot" style="bottom:30%; left:64%; width:20%; height:10%;" onclick="goPage(4)"></div>
     </div>
 </div>
 
-<!-- PAGINA 4 -->
-<div class="page" id="page4">
-    <div class="content-wrapper">
+<!-- PÁGINA 2 (VÍDEO - Fica por cima da 3) -->
+<div class="page" id="page2" style="z-index: 2;">
+    <video id="video" src="pagina2.mp4" playsinline webkit-playsinline preload="auto"></video>
+</div>
+
+<!-- PÁGINA 1 (CAPA - Fica por cima de tudo no início) -->
+<div class="page" id="page1" style="display:block; z-index: 3;">
+    <div style="position: relative; width: 100%; height: 100%;" onclick="startInvite()">
+        <img src="pagina1.jpg">
+    </div>
+</div>
+
+<!-- PÁGINA 4 (EXTRAS) -->
+<div class="page" id="page4" style="z-index: 4;">
+    <div style="position: relative; width: 100%; height: 100%;">
         <img src="pagina4.jpg">
         <div class="btn-voltar" onclick="goPage(3)"></div>
     </div>
@@ -138,25 +110,47 @@
     const btnAudio = document.getElementById('btnControleAudio');
     const iconeAudio = document.getElementById('iconeAudio');
 
+    // Pré-carrega o vídeo assim que abrir o site
+    video.load();
+
     function startInvite() {
-        musica.play().catch(e => console.log("Áudio bloqueado"));
+        // Toca a música
+        musica.play().catch(() => {});
         btnAudio.style.display = 'flex';
         
-        goPage(2);
-        video.play();
+        // Mostra a página do vídeo
+        document.getElementById('page2').style.display = 'block';
+        
+        // Tenta dar play no vídeo
+        const playPromise = video.play();
 
-        // Detecta o fim do vídeo para trocar de página
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                // SÓ ESCONDE A CAPA QUANDO O VÍDEO REALMENTE COMEÇAR (Evita tela preta no início)
+                setTimeout(() => {
+                    document.getElementById('page1').style.display = 'none';
+                }, 100); 
+            }).catch(error => {
+                document.getElementById('page1').style.display = 'none';
+            });
+        }
+
+        // Quando o vídeo estiver quase acabando ou acabar
         video.onended = () => {
-            goPage(3);
+            finalizarVideo();
         };
 
-        // Segurança extra: se o vídeo travar no último frame, ele pula pra pag 3
         video.ontimeupdate = () => {
-            if (video.currentTime >= video.duration - 0.1) {
-                goPage(3);
-                video.ontimeupdate = null; // Desativa para não repetir
+            if (video.currentTime >= video.duration - 0.2) {
+                finalizarVideo();
             }
         };
+    }
+
+    function finalizarVideo() {
+        // Esconde o vídeo. Como a Página 3 já está "atrás" (z-index 1), ela aparece na hora.
+        document.getElementById('page2').style.display = 'none';
+        video.pause();
     }
 
     function toggleAudio() {
@@ -172,18 +166,10 @@
     }
 
     function goPage(num) {
+        // Esconde todas as camadas superiores para navegar
         document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-        const targetPage = document.getElementById('page' + num);
-        if (targetPage) {
-            targetPage.style.display = 'block';
-        }
+        document.getElementById('page' + num).style.display = 'block';
     }
-
-    document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "visible" && !musica.paused) {
-            musica.play();
-        }
-    });
 </script>
 
 </body>
