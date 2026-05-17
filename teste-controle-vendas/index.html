@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestor de Vendas Drika Artes</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F5F2EB;
+    --surface: #FDFCF9;
+    --border: #D8D2C4;
+    --border-strong: #B8B0A0;
+    --text: #1A1814;
+    --text-muted: #6B6560;
+    --text-faint: #9E9890;
+    --accent: #2D5A3D;
+    --accent-light: #E8F0EA;
+    --accent-text: #1D3D29;
+    --warn: #7A3A1A;
+    --warn-light: #F5EBE4;
+    --warn-text: #7A3A1A;
+    --danger: #8B1F1F;
+    --danger-light: #F5E4E4;
+    --mono: 'DM Mono', monospace;
+    --serif: 'Fraunces', Georgia, serif;
+  }
+
+  body {
+    font-family: var(--mono);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--text);
+    color: var(--bg);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  header h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 2rem;
+    font-style: italic;
+    letter-spacing: -0.02em;
+  }
+
+  header span {
+    font-size: 0.75rem;
+    color: #9E9890;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .main-grid {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    min-height: calc(100vh - 72px);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .sidebar h2 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-style: normal;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  label {
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  input, select, textarea {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+  }
+
+  textarea { resize: vertical; min-height: 64px; }
+
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.15s;
+  }
+
+  .btn-primary:hover { background: #333; }
+
+  .btn-cancel {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    padding: 8px 16px;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 6px;
+    transition: all 0.15s;
+  }
+
+  .btn-cancel:hover { background: var(--bg); }
+
+  /* MAIN CONTENT */
+  .content { display: flex; flex-direction: column; }
+
+  /* METRICS */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .metric {
+    padding: 1.25rem 1.5rem;
+    border-right: 1px solid var(--border);
+  }
+
+  .metric:last-child { border-right: none; }
+
+  .metric-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 6px;
+  }
+
+  .metric-value {
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .metric-value.green { color: var(--accent); }
+  .metric-value.amber { color: #6B4A1A; }
+
+  /* FILTERS */
+  .filters {
+    display: flex;
+    gap: 8px;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+
+  .filter-btn {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+
+  .spacer { flex: 1; }
+
+  .export-btn {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    padding: 6px 14px;
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    border-radius: 4px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .export-btn:hover { background: var(--bg); }
+
+  /* TABLE */
+  .table-wrap { flex: 1; overflow-x: auto; }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead th {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    padding: 10px 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+    cursor: pointer;
+  }
+
+  tbody tr:hover { background: var(--surface); }
+
+  tbody td {
+    padding: 12px 1.5rem;
+    font-size: 0.82rem;
+    vertical-align: middle;
+  }
+
+  .td-cliente { font-weight: 500; }
+  .td-valor { font-weight: 500; font-size: 0.9rem; }
+  .td-data { color: var(--text-muted); font-size: 0.78rem; }
+  .td-obs { color: var(--text-muted); font-size: 0.78rem; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .badge-pago { background: var(--accent-light); color: var(--accent-text); }
+  .badge-pendente { background: var(--warn-light); color: var(--warn-text); }
+  .badge-cancelado { background: var(--danger-light); color: var(--danger); }
+
+  .dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
+  .dot-pago { background: var(--accent); }
+  .dot-pendente { background: var(--warn); }
+  .dot-cancelado { background: var(--danger); }
+
+  .action-btns { display: flex; gap: 6px; }
+
+  .btn-icon {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+
+  .btn-icon:hover { background: var(--bg); color: var(--text); }
+  .btn-icon.del:hover { background: var(--danger-light); color: var(--danger); border-color: var(--danger); }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem;
+    color: var(--text-faint);
+    font-size: 0.85rem;
+    line-height: 2;
+  }
+
+  .empty-state strong {
+    display: block;
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+
+  @media (max-width: 900px) {
+    .main-grid { grid-template-columns: 1fr; }
+    .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .metric { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Gestor de Vendas</h1>
+  <span>— controle suas vendas</span>
+</header>
+
+<div class="main-grid">
+  <aside class="sidebar">
+    <h2 id="form-title">Nova venda</h2>
+    <div class="form-group">
+      <label>Cliente</label>
+      <input type="text" id="f-cliente" placeholder="Nome do cliente">
+    </div>
+    <div class="form-group">
+      <label>Produto / Serviço</label>
+      <input type="text" id="f-produto" placeholder="O que foi vendido">
+    </div>
+    <div class="form-group">
+      <label>Tema</label>
+      <input type="text" id="f-tema" placeholder="Ex: Consultoria, Curso, Produto...">
+    </div>
+    <div class="form-group">
+      <label>Valor (R$)</label>
+      <input type="number" id="f-valor" placeholder="0,00" step="0.01" min="0">
+    </div>
+    <div class="form-group">
+      <label>Data</label>
+      <input type="date" id="f-data">
+    </div>
+    <div class="form-group">
+      <label>Status</label>
+      <select id="f-status">
+        <option value="pendente">Pendente</option>
+        <option value="pago">Pago</option>
+        <option value="cancelado">Cancelado</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Observações</label>
+      <textarea id="f-obs" placeholder="Notas adicionais (opcional)"></textarea>
+    </div>
+    <button class="btn-primary" onclick="salvarVenda()">＋ Adicionar venda</button>
+    <button class="btn-cancel" id="btn-cancel" style="display:none" onclick="cancelarEdicao()">Cancelar edição</button>
+  </aside>
+
+  <main class="content">
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-label">Total de vendas</div>
+        <div class="metric-value" id="m-total">0</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Receita total</div>
+        <div class="metric-value green" id="m-receita">R$ 0</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Pagas</div>
+        <div class="metric-value green" id="m-pagas">0</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Pendentes</div>
+        <div class="metric-value amber" id="m-pendentes">0</div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <span class="filter-label">Filtrar:</span>
+      <button class="filter-btn active" onclick="filtrar('todos', this)">Todos</button>
+      <button class="filter-btn" onclick="filtrar('pago', this)">Pagos</button>
+      <button class="filter-btn" onclick="filtrar('pendente', this)">Pendentes</button>
+      <button class="filter-btn" onclick="filtrar('cancelado', this)">Cancelados</button>
+      <div class="spacer"></div>
+      <button class="export-btn" onclick="exportarCSV()">↓ Exportar CSV</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Produto / Serviço</th>
+            <th>Tema</th>
+            <th>Valor</th>
+            <th>Data</th>
+            <th>Status</th>
+            <th>Observações</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tabela-body"></tbody>
+      </table>
+      <div id="empty-state" class="empty-state">
+        <strong>Nenhuma venda ainda</strong>
+        Use o formulário ao lado para registrar sua primeira venda.
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+let vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
+let filtroAtivo = 'todos';
+let editandoId = null;
+
+// Set today's date as default
+document.getElementById('f-data').valueAsDate = new Date();
+
+function salvar() {
+  localStorage.setItem('vendas', JSON.stringify(vendas));
+}
+
+function novoId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function formatarValor(v) {
+  return 'R$ ' + Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function formatarData(d) {
+  if (!d) return '—';
+  const [y, m, dia] = d.split('-');
+  return `${dia}/${m}/${y}`;
+}
+
+function salvarVenda() {
+  const cliente = document.getElementById('f-cliente').value.trim();
+  const produto = document.getElementById('f-produto').value.trim();
+  const valor = parseFloat(document.getElementById('f-valor').value) || 0;
+  const data = document.getElementById('f-data').value;
+  const status = document.getElementById('f-status').value;
+  const tema = document.getElementById('f-tema').value.trim();
+  const obs = document.getElementById('f-obs').value.trim();
+
+  if (!cliente || !produto) {
+    alert('Preencha cliente e produto/serviço.');
+    return;
+  }
+
+  if (editandoId) {
+    const idx = vendas.findIndex(v => v.id === editandoId);
+    if (idx !== -1) {
+      vendas[idx] = { ...vendas[idx], cliente, produto, tema, valor, data, status, obs };
+    }
+    editandoId = null;
+    document.getElementById('form-title').textContent = 'Nova venda';
+    document.querySelector('.btn-primary').textContent = '＋ Adicionar venda';
+    document.getElementById('btn-cancel').style.display = 'none';
+  } else {
+    vendas.unshift({ id: novoId(), cliente, produto, tema, valor, data, status, obs });
+  }
+
+  salvar();
+  limparForm();
+  renderizar();
+}
+
+function limparForm() {
+  document.getElementById('f-cliente').value = '';
+  document.getElementById('f-produto').value = '';
+  document.getElementById('f-tema').value = '';
+  document.getElementById('f-valor').value = '';
+  document.getElementById('f-data').valueAsDate = new Date();
+  document.getElementById('f-status').value = 'pendente';
+  document.getElementById('f-obs').value = '';
+}
+
+function cancelarEdicao() {
+  editandoId = null;
+  document.getElementById('form-title').textContent = 'Nova venda';
+  document.querySelector('.btn-primary').textContent = '＋ Adicionar venda';
+  document.getElementById('btn-cancel').style.display = 'none';
+  limparForm();
+}
+
+function editarVenda(id) {
+  const v = vendas.find(x => x.id === id);
+  if (!v) return;
+  editandoId = id;
+  document.getElementById('f-cliente').value = v.cliente;
+  document.getElementById('f-produto').value = v.produto;
+  document.getElementById('f-tema').value = v.tema || '';
+  document.getElementById('f-valor').value = v.valor;
+  document.getElementById('f-data').value = v.data;
+  document.getElementById('f-status').value = v.status;
+  document.getElementById('f-obs').value = v.obs || '';
+  document.getElementById('form-title').textContent = 'Editar venda';
+  document.querySelector('.btn-primary').textContent = '✓ Salvar alterações';
+  document.getElementById('btn-cancel').style.display = 'block';
+  document.querySelector('.sidebar').scrollIntoView({ behavior: 'smooth' });
+}
+
+function excluirVenda(id) {
+  if (!confirm('Excluir esta venda?')) return;
+  vendas = vendas.filter(v => v.id !== id);
+  salvar();
+  renderizar();
+}
+
+function filtrar(f, btn) {
+  filtroAtivo = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderizar();
+}
+
+function renderizar() {
+  const filtradas = filtroAtivo === 'todos' ? vendas : vendas.filter(v => v.status === filtroAtivo);
+  const tbody = document.getElementById('tabela-body');
+  const empty = document.getElementById('empty-state');
+
+  // Metrics (always from all vendas)
+  const totalReceita = vendas.reduce((s, v) => s + (v.status !== 'cancelado' ? Number(v.valor) : 0), 0);
+  document.getElementById('m-total').textContent = vendas.length;
+  document.getElementById('m-receita').textContent = formatarValor(totalReceita);
+  document.getElementById('m-pagas').textContent = vendas.filter(v => v.status === 'pago').length;
+  document.getElementById('m-pendentes').textContent = vendas.filter(v => v.status === 'pendente').length;
+
+  if (filtradas.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = filtradas.map(v => {
+    const badgeClass = `badge-${v.status}`;
+    const dotClass = `dot-${v.status}`;
+    const statusLabel = v.status === 'pago' ? 'Pago' : v.status === 'pendente' ? 'Pendente' : 'Cancelado';
+    return `<tr>
+      <td class="td-cliente">${esc(v.cliente)}</td>
+      <td>${esc(v.produto)}</td>
+      <td><span style="font-size:0.78rem;color:var(--text-muted)">${esc(v.tema || '—')}</span></td>
+      <td class="td-valor">${formatarValor(v.valor)}</td>
+      <td class="td-data">${formatarData(v.data)}</td>
+      <td><span class="badge ${badgeClass}"><span class="dot ${dotClass}"></span>${statusLabel}</span></td>
+      <td class="td-obs" title="${esc(v.obs || '')}">${esc(v.obs || '—')}</td>
+      <td>
+        <div class="action-btns">
+          <button class="btn-icon" title="Editar" onclick="editarVenda('${v.id}')">✎</button>
+          <button class="btn-icon del" title="Excluir" onclick="excluirVenda('${v.id}')">✕</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function esc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function exportarCSV() {
+  const dados = filtroAtivo === 'todos' ? vendas : vendas.filter(v => v.status === filtroAtivo);
+  if (dados.length === 0) { alert('Nenhuma venda para exportar.'); return; }
+
+  const header = ['Cliente', 'Produto/Serviço', 'Tema', 'Valor', 'Data', 'Status', 'Observações'];
+  const linhas = dados.map(v => [
+    `"${v.cliente}"`,
+    `"${v.produto}"`,
+    `"${v.tema || ''}"`,
+    Number(v.valor).toFixed(2).replace('.', ','),
+    formatarData(v.data),
+    v.status,
+    `"${v.obs || ''}"`
+  ].join(';'));
+
+  const csv = '\uFEFF' + [header.join(';'), ...linhas].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `vendas_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+renderizar();
+</script>
+</body>
+</html>
