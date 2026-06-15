@@ -15,11 +15,23 @@
 <body>
 <div class="container">
     <img src="https://res.cloudinary.com/dlbft9sjz/image/upload/q_auto/f_auto/v1781548906/LOGO_PRINCIPAL_afltnu.png" style="width:150px; display:block; margin:auto;">
-    <input type="text" id="nome" placeholder="Nome do Cliente">
-    <input type="email" id="email" placeholder="Email">
-    <input type="tel" id="whatsInput" placeholder="WhatsApp">
+    
+    <label style="font-size:14px; font-weight:bold; margin-top:10px; display:block;">Nome do Cliente:</label>
+    <input type="text" id="nome">
+    
+    <label style="font-size:14px; font-weight:bold; margin-top:10px; display:block;">Email:</label>
+    <input type="email" id="email">
+    
+    <label style="font-size:14px; font-weight:bold; margin-top:10px; display:block;">WhatsApp:</label>
+    <input type="tel" id="whatsInput">
+    
+    <label style="font-size:14px; font-weight:bold; margin-top:10px; display:block;">Data do Evento:</label>
     <input type="date" id="dataEvento">
-    <input type="text" id="tema" placeholder="Tema">
+    
+    <label style="font-size:14px; font-weight:bold; margin-top:10px; display:block;">Tema da Festa:</label>
+    <input type="text" id="tema">
+    
+    <label style="font-size:14px; font-weight:bold; margin-top:10px; display:block;">Termos do Contrato:</label>
     <textarea id="termosArea" readonly style="height:100px; font-size:10px;"># REGRAS E INFORMAÇÕES DA RETROSPECTIVA
 
 1. Informações Visuais da Festa
@@ -73,12 +85,17 @@ Tenha certeza da ordem das fotos enviadas. A retrospectiva será produzida exata
 Após assistir à retrospectiva final e informar que está tudo correto, não serão aceitas reclamações relacionadas à reprodução do vídeo no dia da festa. Problemas como: Pen drive corrompido, falha ao baixar ou transferir o arquivo, equipamentos com defeito, problemas de configuração, outros fatores externos, são de responsabilidade do cliente e não do fornecedor da retrospectiva. Ao aprovar a versão final, entende-se que o serviço foi concluído e entregue corretamente.
 
 Assinatura</textarea>
+    
     <canvas id="canvas"></canvas>
     <button onclick="clearCanvas()" style="background:#ff4757; margin-bottom:10px;">Limpar Assinatura</button>
-    <div style="background:#fff3cd; padding:10px;"><input type="checkbox" id="aceite"> <b>Declaro que li e concordo com todas as cláusulas (itens 1 ao 16).</b></div>
+    
+    <div style="background:#fff3cd; padding:10px; border-radius:5px; margin-bottom:10px;">
+        <input type="checkbox" id="aceite" style="width:auto; margin-right:10px;"> 
+        <b>Declaro que li e concordo com os itens 1 ao 16.</b>
+    </div>
+    
     <button onclick="gerarPDF()">Gerar PDF e Enviar WhatsApp</button>
-</div>
-<script>
+</div><script>
     const canvas = document.getElementById('canvas'); const ctx = canvas.getContext('2d'); ctx.lineWidth = 3; let drawing = false;
     function getPos(e) { const r = canvas.getBoundingClientRect(); const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left; const y = (e.touches ? e.touches[0].clientY : e.clientY) - r.top; return {x, y}; }
     canvas.onmousedown = (e) => { drawing = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); };
