@@ -5,236 +5,140 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        body { font-family: sans-serif; background: #fff; padding: 20px; }
-        .container { max-width: 600px; margin: auto; }
-        canvas { border: 2px solid #ccc; width: 100%; height: 200px; touch-action: none; background: #fafafa; }
-        input, textarea { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; box-sizing: border-box; }
-        button { background: #25d366; color: white; padding: 15px; width: 100%; border: none; cursor: pointer; }
+        body { font-family: sans-serif; background: #f4f4f4; padding: 0; margin: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100dvh; }
+        .container { max-width: 450px; width: 100%; background: #fff; padding: 25px; box-sizing: border-box; min-height: 100dvh; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+        canvas { border: 2px solid #ccc; width: 100%; max-width: 600px; height: 200px; touch-action: none; background: #fafafa; border-radius: 5px; }
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; box-sizing: border-box; border-radius: 5px; }
+        .btn-group { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 10px; }
+        .btn-group button { width: 48%; padding: 15px; border-radius: 5px; color: white; border: none; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .btn-limpar { background: #ff4757; }
+        .btn-gerar { background: #25d366; }
     </style>
 </head>
 <body>
 <div class="container">
-    <img src="https://res.cloudinary.com/dlbft9sjz/image/upload/q_auto/f_auto/v1781548906/LOGO_PRINCIPAL_afltnu.png" style="width:150px; display:block; margin:auto;">
+    <img src="https://res.cloudinary.com/dlbft9sjz/image/upload/q_auto/f_auto/v1781548906/LOGO_PRINCIPAL_afltnu.png" style="width:150px; display:block; margin:auto; margin-bottom: 20px;">
     
-    <label style="font-size:14px; font-weight:bold; margin-top:10px; display:block;">Nome do Cliente:</label>
+    <label style="font-size:14px; font-weight:bold; display:block; margin-bottom: 5px;">Nome do Cliente:</label>
     <input type="text" id="nome">
     
-    <label style="font-size:14px; font-weight:bold; margin-top:10px; display:block;">Email:</label>
+    <label style="font-size:14px; font-weight:bold; display:block; margin-bottom: 5px;">Email:</label>
     <input type="email" id="email">
     
-    <label style="font-size:14px; font-weight:bold; margin-top:10px; display:block;">WhatsApp:</label>
+    <label style="font-size:14px; font-weight:bold; display:block; margin-bottom: 5px;">WhatsApp:</label>
     <input type="tel" id="whatsInput">
     
-    <label style="font-size:14px; font-weight:bold; margin-top:10px; display:block;">Data do Evento:</label>
+    <label style="font-size:14px; font-weight:bold; display:block; margin-bottom: 5px;">Data do Evento:</label>
     <input type="date" id="dataEvento">
     
-    <label style="font-size:14px; font-weight:bold; margin-top:10px; display:block;">Tema da Festa:</label>
+    <label style="font-size:14px; font-weight:bold; display:block; margin-bottom: 5px;">Tema da Festa:</label>
     <input type="text" id="tema">
     
-    <label style="font-size:14px; font-weight:bold; margin-top:10px; display:block;">Termos do Contrato:</label>
-    <textarea id="termosArea" readonly style="height:100px; font-size:10px;"># REGRAS E INFORMAÇÕES DA RETROSPECTIVA
+    <label style="font-size:14px; font-weight:bold; display:block; margin-bottom: 5px;">Termos do Contrato:</label>
+    <textarea id="termosArea" readonly style="height:120px; font-size:12px; background: #f9f9f9;"># REGRAS E INFORMAÇÕES DA RETROSPECTIVA
 
+1. Informações Visuais da Festa
+Você deverá me enviar informações visuais da festa para que eu possa entender a proposta do evento. Exemplos: Fotos da decoração; Convite da festa.
 
-### 1. Informações Visuais da Festa
+2. Modelo da Retrospectiva
+Vou lhe apresentar um modelo que possuo dentro do tema escolhido. Caso eu não tenha um modelo específico, você poderá visualizar meus trabalhos e avaliações através do primeiro post do meu Instagram, onde também há diversos exemplos disponíveis. Importante: Os modelos servem apenas como base. Músicas, textos serão personalizados para o seu evento.
 
-Você deverá me enviar informações visuais da festa para que eu possa entender a proposta do evento.
+3. Valores e Prazos
+Vou te passar valores, prazos e tudo que preciso para a produção da sua retrospectiva.
 
-**Exemplos:**
+4. Trechos Animados
+Os trechos animados são recursos antigos utilizados em retrospectivas. Além de aumentarem a duração do vídeo, podem acabar ficando um pouco fora do tema. Porém, caso deseje incluí-los, faremos com todo prazer. Basta informar no momento do envio das fotos. Serão inseridos, em média, de 3 a 5 trechos animados, dependendo da quantidade de fotos e da coerência com a história apresentada.
 
-* Fotos da decoração;
-* Convite da festa.
+5. Envio das Fotos
+As fotos devem ser enviadas na mesma ordem em que deseja que apareçam na retrospectiva. Envie em uma pasta as fotos numeradas, ou no whatsapp na ordem que devem aparecer na retro. Importante: Não organizo fotos para clientes.
 
----
+6. Vídeos e Legendas
+- Incluímos até 4 vídeos pessoais sem custo adicional.
+- Acima dessa quantidade, será cobrada uma taxa de R$ 5,99 por vídeo excedente.
+- Também inserimos entre 5 e 10 legendas ao longo da retrospectiva, dependendo da quantidade de fotos enviadas.
 
-### 2. Modelo da Retrospectiva
+7. Tempo da Retrospectiva
+O tempo final varia de acordo com: quantidade de fotos, vídeos, tamanho dos textos e inclusão de trechos animados. Tempo médio para retrospectivas contendo apenas fotos: 80 fotos: 7 a 8 min; 100 fotos: 8 a 10 min; 120 fotos: 10 a 12 min; 150 fotos: 12 a 15 min; 200 fotos: 15 a 20 min. Observação: A inclusão de vídeos pessoais, trechos animados e textos longos aumenta a duração total.
 
-Vou lhe apresentar um modelo que possuo dentro do tema escolhido. Caso eu não tenha um modelo específico, você poderá visualizar meus trabalhos e avaliações através do primeiro post do meu Instagram, onde também há diversos exemplos disponíveis.
+8. Início do Prazo
+O prazo de produção começa a contar a partir do recebimento de: todas as informações solicitadas, fotos e materiais necessários, e pagamento do sinal ou valor integral.
 
-**Importante:** Os modelos servem apenas como base. Músicas, textos serão personalizados para o seu evento.
+9. Prévia para Aprovação
+Será enviada uma prévia para aprovação. Caso seja necessário algum ajuste, ele será realizado e uma nova versão será enviada. Após a aprovação, será entregue a versão final.
 
----
-
-### 3. Valores e Prazos
-
-Vou te passar valores, prazos  e tudo que preciso para a produção da sua retrospectiva.
-
----
-
-### 4. Trechos Animados
-
-Os trechos animados são recursos antigos utilizados em retrospectivas. Além de aumentarem a duração do vídeo, podem acabar ficando um pouco fora do tema.
-
-Porém, caso deseje incluí-los, faremos com todo prazer. Basta informar no momento do envio das fotos.
-
-Serão inseridos, em média, de **3 a 5 trechos animados**, dependendo da quantidade de fotos e da coerência com a história apresentada.
-
----
-
-### 5. Envio das Fotos
-
-As fotos devem ser enviadas **na mesma ordem em que deseja que apareçam na retrospectiva**. Envie em uma pasta as fotos numeradas, ou no whatsapp na ordem que devem aparecer na retro.
-
-**Importante:** Não organizo fotos para clientes.
-
----
-
-### 6. Vídeos e Legendas
-
-* Incluímos até **4 vídeos pessoais** sem custo adicional.
-* Acima dessa quantidade, será cobrada uma taxa de **R$ 5,99 por vídeo excedente**.
-* Também inserimos entre **5 e 10 legendas** ao longo da retrospectiva, dependendo da quantidade de fotos enviadas.
-
----
-
-### 7. Tempo da Retrospectiva
-
-O tempo final varia de acordo com:
-
-* Quantidade de fotos;
-* Quantidade de vídeos;
-* Tamanho dos textos;
-* Inclusão de trechos animados.
-
-#### Tempo médio para retrospectivas contendo apenas fotos:
-
-* **80 fotos:** aproximadamente 7 a 8 minutos;
-* **100 fotos:** aproximadamente 8 a 10 minutos;
-* **120 fotos:** aproximadamente 10 a 12 minutos;
-* **150 fotos:** aproximadamente 12 a 15 minutos;
-* **200 fotos:** aproximadamente 15 a 20 minutos.
-
-**Observação:** A inclusão de vídeos pessoais, trechos animados e textos longos aumenta a duração total da retrospectiva.
-
----
-
-### 8. Início do Prazo
-
-O prazo de produção começa a contar a partir do recebimento de:
-
-* Todas as informações solicitadas;
-* Fotos e materiais necessários;
-* Pagamento do sinal ou valor integral.
-
----
-
-### 9. Prévia para Aprovação
-
-Será enviada uma prévia para aprovação.
-
-Caso seja necessário algum ajuste, ele será realizado e uma nova versão será enviada.
-
-Após a aprovação, será entregue a versão final.
-
----
-
-### 10. Alterações Após a Entrega Final
-
+10. Alterações Após a Entrega Final
 Após o envio da retrospectiva final, qualquer alteração solicitada estará sujeita à cobrança de taxa adicional.
 
----
+11. Entrega da Retrospectiva
+A retrospectiva será entregue em formato MP4. Importante: Teste a retrospectiva no equipamento que será utilizado na festa. Não me responsabilizo pela qualidade, configuração ou funcionamento dos aparelhos utilizados no evento. O arquivo será enviado pelo WhatsApp; ou por um link de download enviado por e-mail, válido por 7 dias.
 
-### 11. Entrega da Retrospectiva
+12. Moldura para Fotos (Brinde)
+A moldura para fotos é um brinde e será criada de acordo com o tema da festa. Por se tratar de um brinde, não serão realizadas alterações ou personalizações. Você receberá um link para acesso à moldura e uma arte para impressão contendo um QR Code. Importante: Não me responsabilizo por problemas de funcionamento decorrentes de aparelhos dos convidados ou instabilidades de internet.
 
-A retrospectiva será entregue em formato **MP4**, compatível com qualquer dispositivo que reproduza esse formato.
+13. Armazenamento dos Arquivos
+Não armazeno fotos nem retrospectivas dos clientes. Após 15 dias da entrega, todos os arquivos serão excluídos do meu computador. Por isso, após receber o material, faça o download e mantenha uma cópia salva em local seguro.
 
-**Importante:** Teste a retrospectiva no equipamento que será utilizado na festa.
-
-Não me responsabilizo pela qualidade, configuração ou funcionamento dos aparelhos utilizados no evento.
-
-O arquivo será enviado:
-
-* Pelo WhatsApp;
-* Por um link de download enviado por e-mail, válido por 7 dias.
-
----
-
-### 12. Moldura para Fotos (Brinde)
-
-A moldura para fotos é um brinde e será criada de acordo com o tema da festa.
-
-Por se tratar de um brinde, não serão realizadas alterações ou personalizações.
-
-Você receberá:
-
-* Um link para acesso à moldura;
-* Uma arte para impressão contendo um QR Code que direciona para a moldura.
-
-**Importante:** Não me responsabilizo por problemas de funcionamento decorrentes de aparelhos dos convidados ou instabilidades de internet.
-
----
-
-### 13. Armazenamento dos Arquivos
-
-Não armazeno fotos nem retrospectivas dos clientes.
-
-Após **15 dias da entrega**, todos os arquivos serão excluídos do meu computador.
-
-Por isso, após receber o material, faça o download e mantenha uma cópia salva em local seguro.
-
----
-
-### 14. Alterações no Modelo
-
+14. Alterações no Modelo
 Qualquer modificação no modelo escolhido deverá ser informada antes do início da produção da prévia.
 
----
+15. Ordem das Fotos
+Tenha certeza da ordem das fotos enviadas. A retrospectiva será produzida exatamente na sequência em que as fotos forem recebidas. Caso, após assistir à prévia, seja constatado que as fotos foram enviadas em ordem incorreta, será cobrada uma taxa para reorganização e nova edição.
 
-### 15. Ordem das Fotos
-
-Tenha certeza da ordem das fotos enviadas.
-
-A retrospectiva será produzida exatamente na sequência em que as fotos forem recebidas.
-
-Caso, após assistir à prévia, seja constatado que as fotos foram enviadas em ordem incorreta, será cobrada uma taxa para reorganização e nova edição, pois esse processo demanda tempo e impacta o cronograma de entregas.
-
----
-
-### 16. Responsabilidade Após Aprovação Final
-
-Após assistir à retrospectiva final e informar que está tudo correto, não serão aceitas reclamações relacionadas à reprodução do vídeo no dia da festa.
-
-Problemas como:
-
-* Pen drive corrompido;
-* Falha ao baixar ou transferir o arquivo;
-* Equipamentos com defeito;
-* Problemas de configuração do aparelho;
-* Outros fatores externos;
-
-são de responsabilidade do cliente e não do fornecedor da retrospectiva.
-
-Ao aprovar a versão final, entende-se que o serviço foi concluído e entregue corretamente.
+16. Responsabilidade Após Aprovação Final
+Após assistir à retrospectiva final e informar que está tudo correto, não serão aceitas reclamações relacionadas à reprodução do vídeo no dia da festa. Problemas como: Pen drive corrompido, falha ao baixar ou transferir o arquivo, equipamentos com defeito, problemas de configuração, outros fatores externos, são de responsabilidade do cliente e não do fornecedor da retrospectiva. Ao aprovar a versão final, entende-se que o serviço foi concluído e entregue corretamente.
 
 Assinatura</textarea>
     
-    <canvas id="canvas"></canvas>
-    <button onclick="clearCanvas()" style="background:#ff4757; margin-bottom:10px;">Limpar Assinatura</button>
+    <label style="font-size:14px; font-weight:bold; display:block; margin-bottom: 5px;">Assinatura:</label>
+    <canvas id="canvas" width="600" height="200"></canvas>
     
-    <div style="background:#fff3cd; padding:10px; border-radius:5px; margin-bottom:10px;">
-        <input type="checkbox" id="aceite" style="width:auto; margin-right:10px;"> 
-        <b>Declaro que li e concordo com os itens 1 ao 16.</b>
+    <div style="background:#fff3cd; padding:15px; border-radius:5px; margin-top:15px; margin-bottom:20px; display: flex; align-items: center;">
+        <input type="checkbox" id="aceite" style="width:auto; margin-right:10px; margin-bottom: 0;"> 
+        <span style="font-size: 14px;"><b>Declaro que li e concordo com os itens 1 ao 16.</b></span>
     </div>
     
-    <button onclick="gerarPDF()">Gerar PDF e Enviar WhatsApp</button>
-</div><script>
-    const canvas = document.getElementById('canvas'); const ctx = canvas.getContext('2d'); ctx.lineWidth = 3; let drawing = false;
-    function getPos(e) { const r = canvas.getBoundingClientRect(); const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left; const y = (e.touches ? e.touches[0].clientY : e.clientY) - r.top; return {x, y}; }
+    <div class="btn-group">
+        <button class="btn-limpar" onclick="clearCanvas()">Limpar</button>
+        <button class="btn-gerar" onclick="gerarPDF()">Baixar PDF</button>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('canvas'); 
+    const ctx = canvas.getContext('2d'); 
+    ctx.lineWidth = 3; 
+    let drawing = false;
+    
+    function getPos(e) { 
+        const r = canvas.getBoundingClientRect(); 
+        const scaleX = canvas.width / r.width;
+        const scaleY = canvas.height / r.height;
+        const x = ((e.touches ? e.touches[0].clientX : e.clientX) - r.left) * scaleX; 
+        const y = ((e.touches ? e.touches[0].clientY : e.clientY) - r.top) * scaleY; 
+        return {x, y}; 
+    }
+    
     canvas.onmousedown = (e) => { drawing = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); };
     canvas.onmousemove = (e) => { if(!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); };
     canvas.onmouseup = () => drawing = false;
+    canvas.onmouseout = () => drawing = false;
+    
     canvas.ontouchstart = (e) => { e.preventDefault(); drawing = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); };
     canvas.ontouchmove = (e) => { e.preventDefault(); if(!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); };
     canvas.ontouchend = () => drawing = false;
+    
     function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
 
     async function gerarPDF() {
         if(!document.getElementById('aceite').checked) { alert('Marque o aceite!'); return; }
+        
         const res = await fetch('https://api.ipify.org?format=json');
         const ip = (await res.json()).ip;
         const hash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(document.getElementById('nome').value + ip)))).map(b => b.toString(16).padStart(2, '0')).join('');
         
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
+        
         doc.addImage("https://res.cloudinary.com/dlbft9sjz/image/upload/q_auto/f_auto/v1781548906/LOGO_PRINCIPAL_afltnu.png", 'PNG', 80, 10, 50, 20);
         
         // DADOS DO CLIENTE EXATOS
@@ -257,15 +161,15 @@ Assinatura</textarea>
             y += 5; 
         });
         
+        // ASSINATURA
         doc.addImage(canvas.toDataURL(), 'PNG', 10, y + 10, 50, 20);
-        // Rodapé Fixo
+        
+        // RODAPÉ DINÂMICO
         doc.setFontSize(8);
-        doc.text("Drika Artes Retrospectiva - Adriana contato (55)1195067-3897", 105, 290, {align: 'center'});
+        doc.text("Drika Artes e Retrospectivas - contato 11950673897", 105, 290, {align: 'center'});
+        
+        // SALVAR
         doc.save('Contrato.pdf');
-
-        // MENSAGEM WHATSAPP EXATA
-        const msg = `*CONTRATO ASSINADO*%0A%0ADADOS DO CLIENTE%0ANome: ${document.getElementById('nome').value}%0AEmail: ${document.getElementById('email').value}%0AWhatsApp: ${document.getElementById('whatsInput').value}%0AData: ${document.getElementById('dataEvento').value}%0ATema: ${document.getElementById('tema').value}%0AAceite: Cliente assinou e concordou com as regras.%0AIP: ${ip}%0AHash: ${hash.substring(0,20)}...%0A%0ADeclaro que li e concordo com Termos aceitos (1-16)`;
-        window.open('https://wa.me/5511950673897?text=' + msg);
     }
 </script>
 </body>
