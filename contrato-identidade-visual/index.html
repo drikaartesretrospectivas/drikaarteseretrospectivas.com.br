@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f4; padding: 0; margin: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100dvh; }
+        .container { max-width: 450px; width: 100%; background: #fff; padding: 25px; box-sizing: border-box; min-height: 100dvh; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+        canvas { border: 2px solid #ccc; width: 100%; max-width: 600px; height: 200px; touch-action: none; background: #fafafa; border-radius: 5px; }
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; box-sizing: border-box; border-radius: 5px; }
+        .btn-group { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 10px; }
+        .btn-group button { width: 48%; padding: 15px; border-radius: 5px; color: white; border: none; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .btn-limpar { background: #ff4757; }
+        .btn-gerar { background: #25d366; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <img src="https://res.cloudinary.com/dlbft9sjz/image/upload/q_auto/f_auto/v1781548906/LOGO_PRINCIPAL_afltnu.png" style="width:150px; display:block; margin:auto; margin-bottom: 20px;">
+    
+    <label style="font-size:14px; font-weight:bold; display:block; margin-bottom: 5px;">Nome do Cliente:</label>
+    <input type="text" id="nome">
+    
+    <label style="font-size:14px; font-weight:bold; display:block; margin-bottom: 5px;">Email:</label>
+    <input type="email" id="email">
+    
+    <label style="font-size:14px; font-weight:bold; display:block; margin-bottom: 5px;">WhatsApp:</label>
+    <input type="tel" id="whatsInput">
+    
+    <label style="font-size:14px; font-weight:bold; display:block; margin-bottom: 5px;">Data do Evento:</label>
+    <input type="date" id="dataEvento">
+    
+    <label style="font-size:14px; font-weight:bold; display:block; margin-bottom: 5px;">Tema da Festa:</label>
+    <input type="text" id="tema">
+    
+    <label style="font-size:14px; font-weight:bold; display:block; margin-bottom: 5px;">Termos do Contrato:</label>
+    <textarea id="termosArea" readonly style="height:120px; font-size:12px; background: #f9f9f9;">REGRAS E INFORMAÇÕES DA IDENTIDADE VISUAL PARA FESTAS E EVENTOS
+
+1. O cliente deverá fornecer todas as informações necessárias para o desenvolvimento da identidade visual, incluindo tema, paleta de cores desejada, referências, textos e demais dados pertinentes ao evento.
+
+2. O prazo de produção será informado no ato da contratação e começará a contar após a confirmação do pagamento e o recebimento de todas as informações solicitadas.
+
+3. Será apresentada uma proposta visual para aprovação. Estão incluídas até 2 (duas) rodadas de ajustes sem custo adicional. Alterações adicionais poderão ser cobradas à parte.
+
+4. Após a aprovação final, a identidade visual será considerada concluída. Modificações posteriores estarão sujeitas à cobrança e a novo prazo de produção.
+
+5. O cliente é responsável por conferir cuidadosamente todos os nomes, datas, textos e demais informações constantes nas artes antes da aprovação final.
+
+6. Ao final do projeto, será entregue um manual da identidade visual contendo os elementos desenvolvidos para o evento, bem como os arquivos finais nos formatos PDF e PNG.
+
+7. Os arquivos do projeto serão armazenados por até 15 (quinze) dias após a entrega final. Após esse período, poderão ser excluídos sem aviso prévio.
+
+8. Por se tratar de serviço personalizado, não haverá devolução de valores após o início da execução do projeto, observadas as disposições legais aplicáveis.
+
+9. A contratada poderá utilizar as artes e elementos da identidade visual desenvolvida, desde que sem dados pessoais ou quaisquer informações que identifiquem o cliente, para fins de portfólio, divulgação e apresentação de trabalhos futuros.
+
+ASSINATURA</textarea>
+    
+    <label style="font-size:14px; font-weight:bold; display:block; margin-bottom: 5px;">Assinatura:</label>
+    <canvas id="canvas" width="600" height="200"></canvas>
+    
+    <div style="background:#fff3cd; padding:15px; border-radius:5px; margin-top:15px; margin-bottom:20px; display: flex; align-items: center;">
+        <input type="checkbox" id="aceite" style="width:auto; margin-right:10px; margin-bottom: 0;"> 
+        <span style="font-size: 14px;"><b>Declaro que li e concordo com os itens 1 ao 16.</b></span>
+    </div>
+    
+    <div class="btn-group">
+        <button class="btn-limpar" onclick="clearCanvas()">Limpar</button>
+        <button class="btn-gerar" onclick="gerarPDF()">Baixar PDF</button>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('canvas'); 
+    const ctx = canvas.getContext('2d'); 
+    ctx.lineWidth = 3; 
+    let drawing = false;
+    
+    function getPos(e) { 
+        const r = canvas.getBoundingClientRect(); 
+        const scaleX = canvas.width / r.width;
+        const scaleY = canvas.height / r.height;
+        const x = ((e.touches ? e.touches[0].clientX : e.clientX) - r.left) * scaleX; 
+        const y = ((e.touches ? e.touches[0].clientY : e.clientY) - r.top) * scaleY; 
+        return {x, y}; 
+    }
+    
+    canvas.onmousedown = (e) => { drawing = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); };
+    canvas.onmousemove = (e) => { if(!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); };
+    canvas.onmouseup = () => drawing = false;
+    canvas.onmouseout = () => drawing = false;
+    
+    canvas.ontouchstart = (e) => { e.preventDefault(); drawing = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); };
+    canvas.ontouchmove = (e) => { e.preventDefault(); if(!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); };
+    canvas.ontouchend = () => drawing = false;
+    
+    function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
+    async function gerarPDF() {
+        if(!document.getElementById('aceite').checked) { alert('Marque o aceite!'); return; }
+        
+        const res = await fetch('https://api.ipify.org?format=json');
+        const ip = (await res.json()).ip;
+        const hash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(document.getElementById('nome').value + ip)))).map(b => b.toString(16).padStart(2, '0')).join('');
+        
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        doc.addImage("https://res.cloudinary.com/dlbft9sjz/image/upload/q_auto/f_auto/v1781548906/LOGO_PRINCIPAL_afltnu.png", 'PNG', 80, 10, 50, 20);
+        
+        // DADOS DO CLIENTE EXATOS
+        doc.setFontSize(10);
+        doc.text("DADOS DO CLIENTE", 10, 40);
+        doc.text("Nome: " + document.getElementById('nome').value, 10, 45);
+        doc.text("Email: " + document.getElementById('email').value, 10, 50);
+        doc.text("WhatsApp: " + document.getElementById('whatsInput').value, 10, 55);
+        doc.text("Data: " + document.getElementById('dataEvento').value, 10, 60);
+        doc.text("Tema: " + document.getElementById('tema').value, 10, 65);
+        doc.text("Aceite: Cliente assinou e concordou com as regras.", 10, 70);
+        doc.text("IP: " + ip, 10, 75);
+        doc.text("Hash: " + hash.substring(0,20) + "...", 10, 80);
+        
+        // TERMOS COMPLETOS
+        let y = 90;
+        doc.splitTextToSize(document.getElementById('termosArea').value, 180).forEach(l => { 
+            if(y > 270) { doc.addPage(); y = 20; }
+            doc.text(l, 10, y); 
+            y += 5; 
+        });
+        
+        // ASSINATURA
+        doc.addImage(canvas.toDataURL(), 'PNG', 10, y + 10, 50, 20);
+        
+        // RODAPÉ DINÂMICO
+        doc.setFontSize(8);
+        doc.text("Drika Artes e Retrospectivas - contato 11950673897", 105, 290, {align: 'center'});
+        
+        // SALVAR
+        doc.save('Contrato.pdf');
+    }
+</script>
+</body>
+</html>
