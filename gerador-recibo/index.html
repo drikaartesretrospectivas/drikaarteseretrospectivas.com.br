@@ -3,104 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerador de Recibos</title>
+  <title>Orçamento</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 20px;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 8px;
-      box-sizing: border-box;
-    }
-    button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-    #recibo {
-      margin-top: 30px;
-      border: 1px solid #ccc;
-      padding: 20px;
-    }
-    .assinatura {
-      text-align: center;
-      margin-top: 40px;
-    }
-    .linha {
-      border-top: 1px solid #000;
-      width: 300px;
-      margin: 0 auto 10px;
-    }
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
+    label { display:block; margin-top:10px; font-weight:bold; }
+    input, textarea { width:100%; padding:8px; box-sizing:border-box; }
+    button { margin-top:15px; padding:10px 16px; }
+    #orcamento { margin-top:30px; border:1px solid #ccc; padding:20px; }
   </style>
 </head>
 <body>
-  <h1>Gerador de Recibos</h1>
+  <h1>Gerador de Orçamento</h1>
 
-  <label>Nome da Cliente</label>
-  <input id="nome">
+  <label>Cliente</label><input id="nome">
+  <label>Telefone</label><input id="telefone">
+  <label>E-mail</label><input id="email" type="email">
+  <label>Serviço</label><input id="servico">
+  <label>Descrição</label><textarea id="descricao"></textarea>
+  <label>Valor Total (R$)</label><input id="total" type="number" step="0.01">
+  <label>Data</label><input id="data" type="date">
 
-  <label>Telefone</label>
-  <input id="telefone">
+  <button onclick="gerar()">Gerar Orçamento</button>
+  <button onclick="baixarPDF()">Baixar PDF</button>
 
-  <label>E-mail</label>
-  <input id="email" type="email">
-
-  <label>Tipo de Serviço</label>
-  <input id="servico">
-
-  <label>Valor do Serviço</label>
-  <input id="valor" type="number" step="0.01">
-
-  <label>Descrição</label>
-  <textarea id="descricao"></textarea>
-
-  <label>Valor Total</label>
-  <input id="total" type="number" step="0.01">
-
-  <label>Data</label>
-  <input id="data" type="date">
-
-  <button onclick="gerarRecibo()">Gerar Recibo</button>
-
-  <div id="recibo"></div>
+  <div id="orcamento"></div>
 
   <script>
-    document.getElementById("data").valueAsDate = new Date();
+    data.valueAsDate = new Date();
 
-    function moeda(v) {
-      return Number(v || 0).toLocaleString('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-      });
+    function brl(v){
+      return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
     }
 
-    function gerarRecibo() {
-      recibo.innerHTML = `
-        <h2>RECIBO</h2>
+    function gerar(){
+      orcamento.innerHTML = `
+        <h2>ORÇAMENTO</h2>
         <p><strong>Data:</strong> ${data.value}</p>
         <p><strong>Cliente:</strong> ${nome.value}</p>
         <p><strong>Telefone:</strong> ${telefone.value}</p>
         <p><strong>E-mail:</strong> ${email.value}</p>
         <p><strong>Serviço:</strong> ${servico.value}</p>
-        <p><strong>Valor do Serviço:</strong> ${moeda(valor.value)}</p>
         <p><strong>Descrição:</strong> ${descricao.value}</p>
-        <p><strong>Total:</strong> <b>${moeda(total.value)}</b></p>
-
-        <div class="assinatura">
-          <div class="linha"></div>
-          <strong>Drika Artes e Retrospectivas</strong><br>
-          (11) 95067-3897
-        </div>
+        <p><strong>Total:</strong> ${brl(total.value)}</p>
+        <hr>
+        <small>Este documento é uma proposta comercial e não constitui comprovante de pagamento.</small>
       `;
+    }
+
+    function baixarPDF(){
+      html2pdf().from(document.getElementById('orcamento'))
+        .set({filename:'orcamento.pdf'})
+        .save();
     }
   </script>
 </body>
