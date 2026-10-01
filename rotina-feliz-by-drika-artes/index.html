@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Meu Dia Feliz">
 
-  <!-- Ícone do Solzinho Amigável Embutido -->
+  <!-- Ícone do Solzinho Embutido -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23E0F2FE'/%3E%3Ccircle cx='50' cy='50' r='24' fill='%23FBBF24'/%3E%3Ccircle cx='42' cy='46' r='3' fill='%231E293B'/%3E%3Ccircle cx='58' cy='46' r='3' fill='%231E293B'/%3E%3Cpath d='M42 56 Q50 64 58 56' stroke='%23D97706' stroke-width='3' stroke-linecap='round' fill='none'/%3E%3Cpath d='M50 14 L50 20 M50 80 L50 86 M14 50 L20 50 M80 50 L86 50 M24 24 L29 29 M71 71 L76 76 M24 76 L29 71 M71 29 L76 24' stroke='%23F59E0B' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23E0F2FE'/%3E%3Ccircle cx='50' cy='50' r='24' fill='%23FBBF24'/%3E%3Ccircle cx='42' cy='46' r='3' fill='%231E293B'/%3E%3Ccircle cx='58' cy='46' r='3' fill='%231E293B'/%3E%3Cpath d='M42 56 Q50 64 58 56' stroke='%23D97706' stroke-width='3' stroke-linecap='round' fill='none'/%3E%3Cpath d='M50 14 L50 20 M50 80 L50 86 M14 50 L20 50 M80 50 L86 50 M24 24 L29 29 M71 71 L76 76 M24 76 L29 71 M71 29 L76 24' stroke='%23F59E0B' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
 
@@ -24,7 +24,6 @@
       --pending: #E2E8F0;
       --completed: #48BB78;
       --completed-card: #F0FFF4;
-      --star-color: #F6AD55;
     }
 
     * {
@@ -79,31 +78,18 @@
 
     .top-bar {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       margin-bottom: 12px;
-    }
-
-    .star-counter {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--star-color);
-      background: #FFFDF5;
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid #FEEBC8;
     }
 
     .lock-btn {
       background: #EDF2F7;
       border: none;
-      padding: 8px 12px;
-      border-radius: 10px;
+      padding: 8px 14px;
+      border-radius: 12px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       color: #4A5568;
       cursor: pointer;
     }
@@ -153,34 +139,6 @@
     .day-btn.active {
       background: var(--primary);
       color: white;
-    }
-
-    /* Painel de Configurações dos Pais */
-    .parent-settings-box {
-      background: #EDF2F7;
-      border-radius: 12px;
-      padding: 10px 14px;
-      margin-top: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .parent-settings-box span {
-      font-size: 13px;
-      font-weight: 600;
-      color: #475569;
-    }
-
-    .btn-toggle-view {
-      background: #FFFFFF;
-      border: 1px solid #CBD5E1;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #0369A1;
-      cursor: pointer;
     }
 
     .form-add {
@@ -243,6 +201,13 @@
       border-color: var(--completed);
     }
 
+    /* Estilo do cartão desativado no Modo Pais */
+    .task-card.is-hidden-pec {
+      opacity: 0.55;
+      border: 2px dashed #94A3B8;
+      background: #F1F5F9;
+    }
+
     .task-left {
       display: flex;
       align-items: center;
@@ -262,11 +227,6 @@
       background: #EDF2F7;
       border: 1px solid #CBD5E1;
       display: block;
-    }
-
-    /* Ocultação dinâmica das imagens */
-    body.hide-images .img-wrapper {
-      display: none !important;
     }
 
     .voice-icon {
@@ -308,20 +268,33 @@
       color: white;
     }
 
-    .btn-delete {
+    .parent-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: 8px;
+    }
+
+    .btn-toggle-pec, .btn-delete {
       background: none;
       border: none;
-      color: #CBD5E1;
-      cursor: pointer;
       font-size: 18px;
-      padding: 8px;
-      margin-left: 6px;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 8px;
+    }
+
+    .btn-toggle-pec {
+      color: #0284C7;
+    }
+
+    .btn-delete {
+      color: #CBD5E1;
     }
 
     /* Ocultação no Modo Criança */
     body.is-locked .form-add,
-    body.is-locked .parent-settings-box,
-    body.is-locked .btn-delete {
+    body.is-locked .parent-controls {
       display: none !important;
     }
 
@@ -349,10 +322,6 @@
 
   <header>
     <div class="top-bar">
-      <div class="star-counter">
-        <span>⭐</span>
-        <span id="starCount">0</span>
-      </div>
       <button class="lock-btn" id="lockBtn" onclick="toggleParentMode()">🔒 Modo Criança</button>
     </div>
 
@@ -370,16 +339,10 @@
       <button class="day-btn" onclick="selectDay('Sáb')">Sáb</button>
       <button class="day-btn" onclick="selectDay('Dom')">Dom</button>
     </div>
-
-    <!-- Controlo de Visibilidade das Imagens (Modo Pais) -->
-    <div class="parent-settings-box">
-      <span>Exibição de Imagens:</span>
-      <button class="btn-toggle-view" id="btnToggleImages" onclick="toggleImagesVisibility()">🖼️ Ocultar Imagens</button>
-    </div>
   </header>
 
   <div class="form-add" id="adminForm">
-    <input type="text" id="taskTitle" placeholder="Ex: Tomar banho, Escovar os dentes">
+    <input type="text" id="taskTitle" placeholder="Ex: Tomar café, Arrumar a cama">
     <div class="file-input-wrapper">
       <span>Foto/Pec:</span>
       <input type="file" id="taskImage" accept="image/*">
@@ -396,20 +359,15 @@
   <script>
     let currentDay = localStorage.getItem('lastSelectedDay') || 'Seg';
     let isParentMode = false;
-    let showImages = localStorage.getItem('showImagesPref') !== 'false';
     const parentPin = localStorage.getItem('routinePin') || '1234';
     let tasks = JSON.parse(localStorage.getItem('routineTasks')) || [];
-    let stars = parseInt(localStorage.getItem('routineStars')) || 0;
 
     window.onload = () => {
       document.getElementById('childName').value = localStorage.getItem('childName') || '';
       document.getElementById('childAge').value = localStorage.getItem('childAge') || '';
-      updateStarDisplay();
-      applyImagesVisibility();
       selectDay(currentDay);
     };
 
-    // Atualização em caso de alternância entre aplicações
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') {
         const savedDay = localStorage.getItem('lastSelectedDay');
@@ -441,20 +399,16 @@
       renderTasks();
     }
 
-    function toggleImagesVisibility() {
-      showImages = !showImages;
-      localStorage.setItem('showImagesPref', showImages);
-      applyImagesVisibility();
-    }
-
-    function applyImagesVisibility() {
-      if (showImages) {
-        document.body.classList.remove('hide-images');
-        document.getElementById('btnToggleImages').innerText = '🖼️ Ocultar Imagens';
-      } else {
-        document.body.classList.add('hide-images');
-        document.getElementById('btnToggleImages').innerText = '👁️ Mostrar Imagens';
-      }
+    function togglePecVisibility(id, event) {
+      event.stopPropagation();
+      tasks = tasks.map(t => {
+        if (t.id === id) {
+          const isCurrentlyVisible = t.visible !== false;
+          return { ...t, visible: !isCurrentlyVisible };
+        }
+        return t;
+      });
+      saveAndRender();
     }
 
     function speakTask(text) {
@@ -463,7 +417,6 @@
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'pt-BR';
         utterance.rate = 0.9;
-        utterance.pitch = 1.0;
         window.speechSynthesis.speak(utterance);
       }
     }
@@ -510,7 +463,8 @@
         day: currentDay,
         title: title,
         image: imageSrc,
-        done: false
+        done: false,
+        visible: true
       });
       saveAndRender();
     }
@@ -520,22 +474,13 @@
         if (t.id === id) {
           const newState = !t.done;
           if (newState) {
-            stars += 1;
             playSuccessSound();
-          } else {
-            stars = Math.max(0, stars - 1);
           }
           return { ...t, done: newState };
         }
         return t;
       });
-      updateStarDisplay();
       saveAndRender();
-    }
-
-    function updateStarDisplay() {
-      localStorage.setItem('routineStars', stars);
-      document.getElementById('starCount').innerText = stars;
     }
 
     function deleteTask(id, event) {
@@ -571,8 +516,14 @@
       const filtered = tasks.filter(t => t.day === currentDay);
 
       filtered.forEach(task => {
+        const isVisible = task.visible !== false;
+
+        // No Modo Criança, apenas os PECs ativos são exibidos
+        if (!isVisible && !isParentMode) return;
+
         const card = document.createElement('div');
-        card.className = `task-card ${task.done ? 'done' : ''}`;
+        card.className = `task-card ${task.done ? 'done' : ''} ${!isVisible ? 'is-hidden-pec' : ''}`;
+        
         card.innerHTML = `
           <div class="task-left" onclick="speakTask('${task.title.replace(/'/g, "\\'")}')">
             <div class="img-wrapper">
@@ -585,7 +536,12 @@
             <button class="btn-action" onclick="toggleTask(${task.id})">
               ${task.done ? '✔ Feito' : 'A Fazer'}
             </button>
-            <button class="btn-delete" title="Excluir" onclick="deleteTask(${task.id}, event)">✕</button>
+            <div class="parent-controls">
+              <button class="btn-toggle-pec" title="${isVisible ? 'Ocultar PEC' : 'Ativar PEC'}" onclick="togglePecVisibility(${task.id}, event)">
+                ${isVisible ? '👁️' : '🙈'}
+              </button>
+              <button class="btn-delete" title="Excluir" onclick="deleteTask(${task.id}, event)">✕</button>
+            </div>
           </div>
         `;
         list.appendChild(card);
