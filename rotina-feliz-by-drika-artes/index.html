@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Meu Dia Feliz - Quadro de Rotina</title>
+
+  <!-- Configuração de App e Atalho para Tela Inicial -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Meu Dia Feliz">
+
+  <!-- Ícone do Solzinho Amigável Embutido -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23E0F2FE'/%3E%3Ccircle cx='50' cy='50' r='24' fill='%23FBBF24'/%3E%3Ccircle cx='42' cy='46' r='3' fill='%231E293B'/%3E%3Ccircle cx='58' cy='46' r='3' fill='%231E293B'/%3E%3Cpath d='M42 56 Q50 64 58 56' stroke='%23D97706' stroke-width='3' stroke-linecap='round' fill='none'/%3E%3Cpath d='M50 14 L50 20 M50 80 L50 86 M14 50 L20 50 M80 50 L86 50 M24 24 L29 29 M71 71 L76 76 M24 76 L29 71 M71 29 L76 24' stroke='%23F59E0B' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23E0F2FE'/%3E%3Ccircle cx='50' cy='50' r='24' fill='%23FBBF24'/%3E%3Ccircle cx='42' cy='46' r='3' fill='%231E293B'/%3E%3Ccircle cx='58' cy='46' r='3' fill='%231E293B'/%3E%3Cpath d='M42 56 Q50 64 58 56' stroke='%23D97706' stroke-width='3' stroke-linecap='round' fill='none'/%3E%3Cpath d='M50 14 L50 20 M50 80 L50 86 M14 50 L20 50 M80 50 L86 50 M24 24 L29 29 M71 71 L76 76 M24 76 L29 71 M71 29 L76 24' stroke='%23F59E0B' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+
+  <style>
+    :root {
+      --bg-color: #F0F4F8;
+      --card-bg: #FFFFFF;
+      --primary: #4A90E2;
+      --text: #2C3E50;
+      --pending: #E2E8F0;
+      --completed: #48BB78;
+      --completed-card: #F0FFF4;
+      --star-color: #F6AD55;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text);
+      padding: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .app-branding {
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .app-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #3182CE;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .app-subtitle {
+      font-size: 13px;
+      color: #718096;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    header {
+      background: var(--card-bg);
+      padding: 16px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 16px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .star-counter {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--star-color);
+      background: #FFFDF5;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid #FEEBC8;
+    }
+
+    .lock-btn {
+      background: #EDF2F7;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #4A5568;
+      cursor: pointer;
+    }
+
+    .profile-info {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .profile-info input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 2px solid #DCE2EC;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .profile-info input:disabled {
+      background: #F8FAFC;
+      border-color: transparent;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .days-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .day-btn {
+      flex: 1;
+      min-width: 42px;
+      padding: 8px 4px;
+      background: #E8EEF5;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #64748B;
+      font-size: 13px;
+    }
+
+    .day-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Painel de Configurações dos Pais */
+    .parent-settings-box {
+      background: #EDF2F7;
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .parent-settings-box span {
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .btn-toggle-view {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0369A1;
+      cursor: pointer;
+    }
+
+    .form-add {
+      background: var(--card-bg);
+      padding: 14px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .form-add input[type="text"] {
+      padding: 10px 14px;
+      border: 2px solid #DCE2EC;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .file-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #64748B;
+    }
+
+    .btn-add {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .routine-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .task-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+      border: 3px solid transparent;
+      transition: all 0.25s ease;
+    }
+
+    .task-card.done {
+      background-color: var(--completed-card);
+      border-color: var(--completed);
+    }
+
+    .task-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+    }
+
+    .img-wrapper {
+      position: relative;
+    }
+
+    .task-img {
+      width: 68px;
+      height: 68px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #EDF2F7;
+      border: 1px solid #CBD5E1;
+      display: block;
+    }
+
+    /* Ocultação dinâmica das imagens */
+    body.hide-images .img-wrapper {
+      display: none !important;
+    }
+
+    .voice-icon {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .task-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .btn-action {
+      background-color: var(--pending);
+      border: none;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .task-card.done .btn-action {
+      background-color: var(--completed);
+      color: white;
+    }
+
+    .btn-delete {
+      background: none;
+      border: none;
+      color: #CBD5E1;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 8px;
+      margin-left: 6px;
+    }
+
+    /* Ocultação no Modo Criança */
+    body.is-locked .form-add,
+    body.is-locked .parent-settings-box,
+    body.is-locked .btn-delete {
+      display: none !important;
+    }
+
+    footer {
+      margin-top: auto;
+      text-align: center;
+      padding: 18px 12px 8px 12px;
+      font-size: 12px;
+      color: #94A3B8;
+      font-weight: 600;
+    }
+
+    .footer-brand {
+      color: #3182CE;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body class="is-locked">
+
+  <div class="app-branding">
+    <div class="app-title">☀️ Meu Dia Feliz</div>
+    <div class="app-subtitle">Quadro de Rotina Visual</div>
+  </div>
+
+  <header>
+    <div class="top-bar">
+      <div class="star-counter">
+        <span>⭐</span>
+        <span id="starCount">0</span>
+      </div>
+      <button class="lock-btn" id="lockBtn" onclick="toggleParentMode()">🔒 Modo Criança</button>
+    </div>
+
+    <div class="profile-info">
+      <input type="text" id="childName" placeholder="Nome da Criança" onchange="saveProfile()" disabled>
+      <input type="number" id="childAge" placeholder="Idade" style="max-width: 90px;" onchange="saveProfile()" disabled>
+    </div>
+
+    <div class="days-bar" id="daysBar">
+      <button class="day-btn" onclick="selectDay('Seg')">Seg</button>
+      <button class="day-btn" onclick="selectDay('Ter')">Ter</button>
+      <button class="day-btn" onclick="selectDay('Qua')">Qua</button>
+      <button class="day-btn" onclick="selectDay('Qui')">Qui</button>
+      <button class="day-btn" onclick="selectDay('Sex')">Sex</button>
+      <button class="day-btn" onclick="selectDay('Sáb')">Sáb</button>
+      <button class="day-btn" onclick="selectDay('Dom')">Dom</button>
+    </div>
+
+    <!-- Controlo de Visibilidade das Imagens (Modo Pais) -->
+    <div class="parent-settings-box">
+      <span>Exibição de Imagens:</span>
+      <button class="btn-toggle-view" id="btnToggleImages" onclick="toggleImagesVisibility()">🖼️ Ocultar Imagens</button>
+    </div>
+  </header>
+
+  <div class="form-add" id="adminForm">
+    <input type="text" id="taskTitle" placeholder="Ex: Tomar banho, Escovar os dentes">
+    <div class="file-input-wrapper">
+      <span>Foto/Pec:</span>
+      <input type="file" id="taskImage" accept="image/*">
+    </div>
+    <button class="btn-add" onclick="addTask()">+ Adicionar à Rotina</button>
+  </div>
+
+  <main class="routine-list" id="taskList"></main>
+
+  <footer>
+    Produzido com carinho por <span class="footer-brand">Drika Artes e Retrospectivas</span>
+  </footer>
+
+  <script>
+    let currentDay = localStorage.getItem('lastSelectedDay') || 'Seg';
+    let isParentMode = false;
+    let showImages = localStorage.getItem('showImagesPref') !== 'false';
+    const parentPin = localStorage.getItem('routinePin') || '1234';
+    let tasks = JSON.parse(localStorage.getItem('routineTasks')) || [];
+    let stars = parseInt(localStorage.getItem('routineStars')) || 0;
+
+    window.onload = () => {
+      document.getElementById('childName').value = localStorage.getItem('childName') || '';
+      document.getElementById('childAge').value = localStorage.getItem('childAge') || '';
+      updateStarDisplay();
+      applyImagesVisibility();
+      selectDay(currentDay);
+    };
+
+    // Atualização em caso de alternância entre aplicações
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        const savedDay = localStorage.getItem('lastSelectedDay');
+        if (savedDay && savedDay !== currentDay) {
+          selectDay(savedDay);
+        }
+      }
+    });
+
+    function toggleParentMode() {
+      if (!isParentMode) {
+        const inputPin = prompt('Digite o PIN de 4 dígitos para editar (Padrão: 1234):');
+        if (inputPin === parentPin) {
+          isParentMode = true;
+          document.body.classList.remove('is-locked');
+          document.getElementById('lockBtn').innerText = '🔓 Modo Pais';
+          document.getElementById('childName').disabled = false;
+          document.getElementById('childAge').disabled = false;
+        } else if (inputPin !== null) {
+          alert('PIN incorreto.');
+        }
+      } else {
+        isParentMode = false;
+        document.body.classList.add('is-locked');
+        document.getElementById('lockBtn').innerText = '🔒 Modo Criança';
+        document.getElementById('childName').disabled = true;
+        document.getElementById('childAge').disabled = true;
+      }
+      renderTasks();
+    }
+
+    function toggleImagesVisibility() {
+      showImages = !showImages;
+      localStorage.setItem('showImagesPref', showImages);
+      applyImagesVisibility();
+    }
+
+    function applyImagesVisibility() {
+      if (showImages) {
+        document.body.classList.remove('hide-images');
+        document.getElementById('btnToggleImages').innerText = '🖼️ Ocultar Imagens';
+      } else {
+        document.body.classList.add('hide-images');
+        document.getElementById('btnToggleImages').innerText = '👁️ Mostrar Imagens';
+      }
+    }
+
+    function speakTask(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'pt-BR';
+        utterance.rate = 0.9;
+        utterance.pitch = 1.0;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function saveProfile() {
+      localStorage.setItem('childName', document.getElementById('childName').value);
+      localStorage.setItem('childAge', document.getElementById('childAge').value);
+    }
+
+    function selectDay(day) {
+      currentDay = day;
+      localStorage.setItem('lastSelectedDay', day);
+
+      document.querySelectorAll('.day-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText === day);
+      });
+      renderTasks();
+    }
+
+    function addTask() {
+      const titleInput = document.getElementById('taskTitle');
+      const fileInput = document.getElementById('taskImage');
+      const title = titleInput.value.trim();
+
+      if (!title) return;
+
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          createTaskObject(title, e.target.result);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        createTaskObject(title, 'https://via.placeholder.com/80/EDF2F7/4A90E2?text=Item');
+      }
+
+      titleInput.value = '';
+      fileInput.value = '';
+    }
+
+    function createTaskObject(title, imageSrc) {
+      tasks.push({
+        id: Date.now(),
+        day: currentDay,
+        title: title,
+        image: imageSrc,
+        done: false
+      });
+      saveAndRender();
+    }
+
+    function toggleTask(id) {
+      tasks = tasks.map(t => {
+        if (t.id === id) {
+          const newState = !t.done;
+          if (newState) {
+            stars += 1;
+            playSuccessSound();
+          } else {
+            stars = Math.max(0, stars - 1);
+          }
+          return { ...t, done: newState };
+        }
+        return t;
+      });
+      updateStarDisplay();
+      saveAndRender();
+    }
+
+    function updateStarDisplay() {
+      localStorage.setItem('routineStars', stars);
+      document.getElementById('starCount').innerText = stars;
+    }
+
+    function deleteTask(id, event) {
+      event.stopPropagation();
+      tasks = tasks.filter(t => t.id !== id);
+      saveAndRender();
+    }
+
+    function saveAndRender() {
+      localStorage.setItem('routineTasks', JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    function playSuccessSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.35);
+      } catch (e) {}
+    }
+
+    function renderTasks() {
+      const list = document.getElementById('taskList');
+      list.innerHTML = '';
+      const filtered = tasks.filter(t => t.day === currentDay);
+
+      filtered.forEach(task => {
+        const card = document.createElement('div');
+        card.className = `task-card ${task.done ? 'done' : ''}`;
+        card.innerHTML = `
+          <div class="task-left" onclick="speakTask('${task.title.replace(/'/g, "\\'")}')">
+            <div class="img-wrapper">
+              <img src="${task.image}" class="task-img" alt="${task.title}">
+              <span class="voice-icon">🔊</span>
+            </div>
+            <span class="task-name">${task.title}</span>
+          </div>
+          <div style="display:flex; align-items:center;">
+            <button class="btn-action" onclick="toggleTask(${task.id})">
+              ${task.done ? '✔ Feito' : 'A Fazer'}
+            </button>
+            <button class="btn-delete" title="Excluir" onclick="deleteTask(${task.id}, event)">✕</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>
