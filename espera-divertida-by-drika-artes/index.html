@@ -13,7 +13,7 @@
       --water-deep: #0284C7;
       --text: #1E293B;
       --text-muted: #64748B;
-      --card-border: #E0F2FE;
+      --card-border: #BAE6FD;
     }
 
     * {
@@ -26,8 +26,8 @@
     body {
       background-color: var(--bg-color);
       color: var(--text);
-      padding: 16px;
-      max-width: 480px;
+      padding: 14px;
+      max-width: 500px;
       margin: 0 auto;
       user-select: none;
       display: flex;
@@ -39,7 +39,7 @@
     .app-header {
       text-align: center;
       margin-top: 4px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .app-title {
@@ -59,29 +59,30 @@
       margin-top: 2px;
     }
 
-    /* Banheira Central */
+    /* Container Central da Banheira / Aquário */
     .timer-container {
       background: var(--card-bg);
-      border-radius: 28px;
-      padding: 22px 18px;
+      border-radius: 32px;
+      padding: 20px 14px 18px 14px;
       box-shadow: 0 10px 25px rgba(2, 132, 199, 0.08);
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       border: 3px solid var(--card-border);
       position: relative;
     }
 
+    /* Banheira / Aquário Ampliado (310px) */
     .pond-wrapper {
       position: relative;
-      width: 250px;
-      height: 250px;
+      width: 310px;
+      height: 310px;
       border-radius: 50%;
       background: #E0F2FE;
-      border: 10px solid #BAE6FD;
+      border: 12px solid #BAE6FD;
       overflow: hidden;
-      box-shadow: inset 0 6px 14px rgba(0,0,0,0.06);
+      box-shadow: inset 0 8px 18px rgba(0,0,0,0.08);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -95,71 +96,71 @@
       height: 100%;
       background: linear-gradient(180deg, var(--water-color) 0%, var(--water-deep) 100%);
       transition: height 0.6s linear;
-      border-top: 4px solid #7DD3FC;
+      border-top: 5px solid #7DD3FC;
     }
 
-    /* Patinho Amarelinho */
+    /* Patinho Amarelinho Ampliado (105px) */
     .duck-float {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
       transition: bottom 0.6s linear, transform 0.3s ease;
-      bottom: calc(100% - 70px);
+      bottom: calc(100% - 95px);
       z-index: 10;
       cursor: pointer;
     }
 
     .duck-svg {
-      width: 78px;
-      height: 78px;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+      width: 105px;
+      height: 105px;
+      filter: drop-shadow(0 6px 8px rgba(0,0,0,0.18));
       animation: bobbing 2.2s infinite ease-in-out;
     }
 
     @keyframes bobbing {
       0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-5px) rotate(3deg); }
+      50% { transform: translateY(-7px) rotate(3deg); }
     }
 
-    /* Animação comemorativa do Patinho */
+    /* Dança Comemorativa do Patinho */
     .celebrating .duck-svg {
-      animation: duckDance 0.6s infinite alternate ease-in-out !important;
+      animation: duckDance 0.55s infinite alternate ease-in-out !important;
     }
 
     @keyframes duckDance {
-      0% { transform: translateY(0px) scale(1) rotate(-8deg); }
-      100% { transform: translateY(-22px) scale(1.15) rotate(8deg); }
+      0% { transform: translateY(0px) scale(1) rotate(-10deg); }
+      100% { transform: translateY(-28px) scale(1.18) rotate(10deg); }
     }
 
-    /* Bolhas de Sabão subindo */
+    /* Bolhas de Sabão */
     .bubble {
       position: absolute;
-      bottom: -20px;
-      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(125, 211, 252, 0.4));
-      border: 2px solid rgba(255, 255, 255, 0.8);
+      bottom: -30px;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), rgba(125, 211, 252, 0.45));
+      border: 2px solid rgba(255, 255, 255, 0.85);
       border-radius: 50%;
-      opacity: 0.85;
-      animation: rise 2.5s infinite ease-in;
+      opacity: 0.9;
+      animation: rise 2.4s infinite ease-in;
       pointer-events: none;
       z-index: 15;
     }
 
     @keyframes rise {
       0% {
-        transform: translateY(0) scale(0.5);
-        opacity: 0.9;
+        transform: translateY(0) scale(0.4);
+        opacity: 0.95;
       }
       100% {
-        transform: translateY(-280px) scale(1.2);
+        transform: translateY(-350px) scale(1.3);
         opacity: 0;
       }
     }
 
     .timer-digits {
-      font-size: 40px;
+      font-size: 42px;
       font-weight: 800;
       color: #0369A1;
-      margin-top: 14px;
+      margin-top: 12px;
       letter-spacing: 1px;
     }
 
@@ -172,17 +173,17 @@
       min-height: 20px;
     }
 
-    /* Ajuste Manual do Tempo */
+    /* Ajuste Manual Fino de Minutos */
     .time-adjust-row {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       background: var(--card-bg);
       padding: 10px 14px;
       border-radius: 18px;
-      border: 2px solid var(--card-border);
+      border: 2px solid #E0F2FE;
     }
 
     .btn-step {
@@ -191,7 +192,7 @@
       border: none;
       font-size: 16px;
       font-weight: 800;
-      padding: 8px 14px;
+      padding: 8px 16px;
       border-radius: 12px;
       cursor: pointer;
     }
@@ -200,18 +201,18 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 700;
       color: #475569;
     }
 
     .custom-min-input {
-      width: 58px;
+      width: 62px;
       padding: 6px 8px;
       border: 2px solid #BAE6FD;
       border-radius: 10px;
       text-align: center;
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 800;
       color: #0369A1;
       outline: none;
@@ -221,7 +222,7 @@
     .presets-bar {
       display: flex;
       gap: 6px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .preset-btn {
@@ -242,11 +243,11 @@
       border-color: var(--primary);
     }
 
-    /* Botões de Controle Principal */
+    /* Ações Principais */
     .action-row {
       display: flex;
       gap: 10px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .btn-main {
@@ -282,7 +283,7 @@
     footer {
       margin-top: auto;
       text-align: center;
-      padding: 14px;
+      padding: 12px;
       font-size: 13px;
       color: #64748B;
       font-weight: 600;
@@ -305,14 +306,14 @@
     <div class="pond-wrapper" id="pond">
       <div class="water-fill" id="waterLevel"></div>
       
-      <!-- Patinho Amarelinho -->
+      <!-- Patinho Amarelinho (105px) -->
       <div class="duck-float" id="duckFloat" onclick="quackSound()" title="Toque no patinho!">
         <svg class="duck-svg" viewBox="0 0 100 100">
           <ellipse cx="50" cy="62" rx="30" ry="22" fill="#FACC15" />
           <path d="M75 58 Q85 52 82 44 Q70 48 68 54 Z" fill="#FACC15" />
           <circle cx="34" cy="40" r="18" fill="#FACC15" />
           <circle cx="28" cy="36" r="3.5" fill="#1E293B" />
-          <circle cx="27" cy="35" r="1" fill="#FFFFFF" />
+          <circle cx="27" cy="35" r="1.2" fill="#FFFFFF" />
           <path d="M20 40 Q8 42 16 48 Q24 48 25 45 Z" fill="#FB923C" />
           <ellipse cx="54" cy="62" rx="14" ry="9" fill="#EAB308" />
         </svg>
@@ -323,7 +324,7 @@
     <div class="timer-label" id="statusLabel">Toque no patinho para ouvi-lo!</div>
   </div>
 
-  <!-- Ajuste Manual Fino de Minutos -->
+  <!-- Ajuste Manual de Tempo -->
   <div class="time-adjust-row">
     <button class="btn-step" onclick="adjustTime(-1)">- 1 min</button>
     <div class="time-input-group">
@@ -343,7 +344,7 @@
     <button class="preset-btn" onclick="applyPreset(15)">15 min</button>
   </div>
 
-  <!-- Botões Começar / Pausar / Reiniciar -->
+  <!-- Controles Principais -->
   <div class="action-row">
     <button class="btn-main" id="btnPlay" onclick="toggleTimer()">Começar</button>
     <button class="btn-reset" onclick="resetTimer()">Reiniciar</button>
@@ -360,6 +361,58 @@
     let isRunning = false;
     let bubbleInterval = null;
 
+    const STORAGE_KEY_END = 'espera_end_time';
+    const STORAGE_KEY_TOTAL = 'espera_total_sec';
+    const STORAGE_KEY_RUNNING = 'espera_is_running';
+
+    window.addEventListener('load', restoreTimerState);
+    
+    // Retoma o tempo com precisão se trocar de aplicativo e voltar
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && isRunning) {
+        syncFromTimestamp();
+      }
+    });
+
+    function restoreTimerState() {
+      const savedRunning = localStorage.getItem(STORAGE_KEY_RUNNING) === 'true';
+      const savedTotal = parseInt(localStorage.getItem(STORAGE_KEY_TOTAL));
+
+      if (savedTotal) {
+        totalSeconds = savedTotal;
+        const mins = Math.round(totalSeconds / 60);
+        document.getElementById('customInput').value = mins;
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.innerText === `${mins} min`);
+        });
+      }
+
+      if (savedRunning) {
+        syncFromTimestamp();
+        startTimer(false);
+      } else {
+        remainingSeconds = totalSeconds;
+        updateDisplay();
+      }
+    }
+
+    function syncFromTimestamp() {
+      const endTime = parseInt(localStorage.getItem(STORAGE_KEY_END));
+      if (!endTime) return;
+
+      const now = Date.now();
+      const diffSecs = Math.round((endTime - now) / 1000);
+
+      if (diffSecs <= 0) {
+        remainingSeconds = 0;
+        updateDisplay();
+        finishTimer();
+      } else {
+        remainingSeconds = diffSecs;
+        updateDisplay();
+      }
+    }
+
     function updateDisplay() {
       const minutes = Math.floor(remainingSeconds / 60);
       const seconds = remainingSeconds % 60;
@@ -372,7 +425,8 @@
 
       waterEl.style.height = `${percentage}%`;
 
-      const bottomPos = Math.max(14, (percentage * 250 / 100) - 42);
+      // Cálculo adaptado para a banheira de 310px e patinho de 105px
+      const bottomPos = Math.max(16, (percentage * 310 / 100) - 58);
       duckEl.style.bottom = `${bottomPos}px`;
     }
 
@@ -380,33 +434,39 @@
       if (isRunning) {
         pauseTimer();
       } else {
-        startTimer();
+        startTimer(true);
       }
     }
 
-    function startTimer() {
+    function startTimer(isFirstStart = true) {
       stopCelebration();
       if (remainingSeconds <= 0) resetTimer();
       isRunning = true;
+
+      const endTime = Date.now() + (remainingSeconds * 1000);
+      localStorage.setItem(STORAGE_KEY_END, endTime);
+      localStorage.setItem(STORAGE_KEY_TOTAL, totalSeconds);
+      localStorage.setItem(STORAGE_KEY_RUNNING, 'true');
+
       document.getElementById('btnPlay').innerText = "Pausar";
       document.getElementById('btnPlay').classList.add('running');
       document.getElementById('statusLabel').innerText = "A água está baixando devagar...";
 
-      speak("Tempo iniciado! Olhe o patinho na banheira.");
+      if (isFirstStart) {
+        speak("Tempo iniciado! Olhe o patinho na banheira.");
+      }
 
+      clearInterval(timerInterval);
       timerInterval = setInterval(() => {
-        if (remainingSeconds > 0) {
-          remainingSeconds--;
-          updateDisplay();
-        } else {
-          finishTimer();
-        }
+        syncFromTimestamp();
       }, 1000);
     }
 
     function pauseTimer() {
       isRunning = false;
       clearInterval(timerInterval);
+      localStorage.setItem(STORAGE_KEY_RUNNING, 'false');
+
       document.getElementById('btnPlay').innerText = "Continuar";
       document.getElementById('btnPlay').classList.remove('running');
       document.getElementById('statusLabel').innerText = "Em pausa";
@@ -415,6 +475,9 @@
     function resetTimer() {
       pauseTimer();
       stopCelebration();
+      localStorage.removeItem(STORAGE_KEY_END);
+      localStorage.setItem(STORAGE_KEY_RUNNING, 'false');
+
       remainingSeconds = totalSeconds;
       document.getElementById('btnPlay').innerText = "Começar";
       document.getElementById('statusLabel').innerText = "Toque no patinho para ouvi-lo!";
@@ -456,12 +519,14 @@
 
     function finishTimer() {
       pauseTimer();
+      localStorage.removeItem(STORAGE_KEY_END);
+      localStorage.setItem(STORAGE_KEY_RUNNING, 'false');
+
       startCelebration();
       document.getElementById('statusLabel').innerText = "🎉 O tempo acabou! Muito bem!";
       speak("O tempo acabou! Muito bem! O patinho está muito feliz!");
     }
 
-    // Comemoração: Dança do patinho + Bolhas de sabão
     function startCelebration() {
       document.getElementById('duckFloat').classList.add('celebrating');
       playVictoryMusic();
@@ -470,15 +535,15 @@
       bubbleInterval = setInterval(() => {
         const bubble = document.createElement('div');
         bubble.className = 'bubble';
-        const size = Math.floor(Math.random() * 26) + 16;
+        const size = Math.floor(Math.random() * 32) + 20;
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
-        bubble.style.left = `${Math.floor(Math.random() * 200) + 25}px`;
+        bubble.style.left = `${Math.floor(Math.random() * 250) + 25}px`;
         bubble.style.animationDuration = `${(Math.random() * 1.2 + 1.8)}s`;
         pond.appendChild(bubble);
 
         setTimeout(() => bubble.remove(), 2500);
-      }, 250);
+      }, 230);
     }
 
     function stopCelebration() {
@@ -487,15 +552,14 @@
       document.querySelectorAll('.bubble').forEach(b => b.remove());
     }
 
-    // Melodia de celebração harmoniosa com quack alegre
     function playVictoryMusic() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const melody = [
-          { f: 523.25, d: 0.15 }, // C5
-          { f: 659.25, d: 0.15 }, // E5
-          { f: 783.99, d: 0.15 }, // G5
-          { f: 1046.50, d: 0.35 } // C6
+          { f: 523.25, d: 0.15 },
+          { f: 659.25, d: 0.15 },
+          { f: 783.99, d: 0.15 },
+          { f: 1046.50, d: 0.35 }
         ];
 
         melody.forEach((note, i) => {
@@ -511,7 +575,6 @@
           osc.stop(start + note.d + 0.3);
         });
 
-        // Dois quacks alegres ao final
         setTimeout(() => quackSound(), 800);
         setTimeout(() => quackSound(), 1100);
       } catch(e) {}
@@ -543,8 +606,6 @@
         window.speechSynthesis.speak(utterance);
       }
     }
-
-    updateDisplay();
   </script>
 </body>
 </html>
